@@ -4,23 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MEYS GRILL - AR Digital Menu</title>
-    
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
     <style>
-        /* ==========================================
-           1. PERSONALIZZAZIONE STILE (LAYOUT & COLORI)
-           ========================================== */
+        /* --- CONFIGURAZIONE STILE --- */
         :root {
-            --colore-principale: #c5a059;    /* Colore dei prezzi e dettagli */
-            --colore-sfondo: #f8f8f8;        /* Colore delle pagine */
-            --colore-testo: #1a1a1a;        /* Colore scritte principali */
-            --colore-pulsante: #1a1a1a;     /* Colore tasto AR */
+            --colore-principale: #c5a059;
+            --colore-sfondo: #f8f8f8;
+            --colore-testo: #1a1a1a;
+            --colore-pulsante: #1a1a1a;
             --font-titoli: 'Playfair Display', serif;
             --font-corpo: 'Poppins', sans-serif;
-            --dimensione-logo: 2.2rem;       /* Grandezza scritta Logo */
+            --dimensione-logo: 2.2rem;
         }
 
         body { font-family: var(--font-corpo); margin: 0; background: var(--colore-sfondo); color: var(--colore-testo); }
@@ -30,18 +26,18 @@
         .screen { display: none; min-height: 100vh; width: 100%; padding: 20px; box-sizing: border-box; }
         .screen.active { display: block; animation: fadeIn 0.4s ease; }
 
-        /* Stile Landing (Food/Drink) */
+        /* Landing */
         .landing-grid { display: flex; flex-direction: column; gap: 20px; margin-top: 20px; }
         .btn-macro { height: 200px; border-radius: 20px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
         .btn-macro img { position: absolute; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.5); }
         .btn-macro span { position: relative; color: white; font-size: 2.5rem; font-family: var(--font-titoli); z-index: 2; }
 
-        /* Stile Categorie */
-        .cat-card { height: 130px; border-radius: 15px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        /* Categorie */
+        .cat-card { height: 130px; border-radius: 15px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; cursor: pointer; }
         .cat-card img { position: absolute; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6); }
         .cat-card span { position: relative; color: white; font-size: 1.7rem; font-family: var(--font-titoli); }
 
-        /* Stile Scheda Piatto */
+        /* Scheda Piatto */
         .item-card { background: white; border-radius: 20px; margin-bottom: 30px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.08); position: relative; }
         .item-info { padding: 20px; }
         .item-header { display: flex; justify-content: space-between; align-items: baseline; }
@@ -49,8 +45,9 @@
         .allergens { font-size: 1.2rem; margin: 10px 0; }
         .item-desc { color: #555; font-size: 0.95rem; line-height: 1.5; }
 
-        /* Stile 3D e Tasto AR */
+        /* 3D Visualizer */
         model-viewer { width: 100%; height: 400px; background: #fafafa; }
+        
         .ar-btn { 
             background: var(--colore-pulsante); color: white; border: none; padding: 18px; 
             font-weight: 700; cursor: pointer; border-radius: 50px;
@@ -60,13 +57,12 @@
         }
 
         .back-bar { padding: 15px; background: #eee; cursor: pointer; font-weight: 600; color: var(--colore-principale); margin-bottom: 10px; border-radius: 10px; display: inline-block; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-<header><h1 class="logo" onclick="location.reload()">Pino Menu</h1></header>
+<header><h1 class="logo" onclick="location.reload()">MEYS GRILL</h1></header>
 
 <div id="scr-landing" class="screen active">
     <div class="landing-grid">
@@ -93,7 +89,7 @@
 
 <script>
 /* ==========================================
-   2. GESTIONE DATI (AGGIUNGI/LEVA PIATTI QUI)
+   GESTIONE DATI (MODIFICA QUI)
    ========================================== */
 const MENU_DATA = {
     food: [
@@ -102,58 +98,21 @@ const MENU_DATA = {
             nome: "Platos Principales", 
             foto: "https://images.unsplash.com/photo-1512058560566-427a19db01cc?w=400",
             piatti: [
-                { 
-                    n: "Paella de Marisco", 
-                    p: "18.50€", 
-                    d: "Cocinada a leña con marisco fresco de la costa.", 
-                    a: "🦐, 🐚, 🐟", 
-                    m: "piatto.glb" 
-                },
-                { 
-                    n: "Fideuà de Gandía", 
-                    p: "16.00€", 
-                    d: "Pasta corta cotta in brodo intenso di pesce.", 
-                    a: "🦐, 🐚, 🐟, 🌾", 
-                    m: "" 
-                },
-                { 
-                    n: "Arroz a Banda", 
-                    p: "17.00€", 
-                    d: "Riso cotto nel fondo di pesce, servito con alioli.", 
-                    a: "🐟, 🥚", 
-                    m: "" 
-                }
-            ]
-        },
-        { 
-            id: "entrantes", 
-            nome: "Entrantes", 
-            foto: "https://images.unsplash.com/photo-1541529086526-db283c563270?w=400",
-            piatti: [
-                { 
-                    n: "Gambas al Ajillo", 
-                    p: "12.00€", 
-                    d: "Gamberetti saltati con aglio, olio e peperoncino.", 
-                    a: "🦐", 
-                    m: "" 
-                }
+                { n: "Paella de Marisco", p: "18.50€", d: "Cocinada a leña con marisco fresco de la costa.", a: "🦐, 🐚, 🐟", m: "piatto.glb" },
+                { n: "Fideuà de Gandía", p: "16.00€", d: "Pasta corta cotta in brodo intenso di pesce.", a: "🦐, 🐚, 🐟, 🌾", m: "" }
             ]
         }
     ],
     drinks: [
         { 
-            id: "vini", 
-            nome: "Vini Bianchi", 
-            foto: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400",
-            piatti: [
-                { n: "Albariño D.O.", p: "22.00€", d: "Vino fresco e fruttato della Galizia.", a: "🍷", m: "" }
-            ]
+            id: "vini", nome: "Vini Bianchi", foto: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400",
+            piatti: [{ n: "Albariño D.O.", p: "22.00€", d: "Vino fresco Galiziano.", a: "🍷", m: "" }]
         }
     ]
 };
 
 /* ==========================================
-   3. MOTORE DI NAVIGAZIONE (NON TOCCARE)
+   MOTORE NAVIGAZIONE & 3D
    ========================================== */
 let currentMacro = 'food';
 
@@ -164,11 +123,7 @@ function navToCategories(type) {
     const container = document.getElementById('cat-list');
     container.innerHTML = '';
     MENU_DATA[type].forEach(cat => {
-        container.innerHTML += `
-            <div class="cat-card" onclick="navToItems('${cat.id}')">
-                <img src="${cat.foto}">
-                <span>${cat.nome}</span>
-            </div>`;
+        container.innerHTML += `<div class="cat-card" onclick="navToItems('${cat.id}')"><img src="${cat.foto}"><span>${cat.nome}</span></div>`;
     });
     switchScreen('scr-categories');
 }
@@ -182,11 +137,19 @@ function navToItems(catId) {
         let html = `<div class="item-card">`;
         if(p.m) {
             html += `
-            <model-viewer src="${p.m}" ar ar-modes="scene-viewer quick-look webxr" ar-placement="floor"
-                camera-controls interaction-prompt="none" auto-rotate rotation-per-second="30deg" 
-                shadow-intensity="2" disable-zoom disable-pan>
-                <button slot="ar-button" class="ar-btn">🥘 VEDI SUL TUO TAVOLO</button>
-            </model-viewer>`;
+            <div style="position:relative;">
+                <model-viewer src="${p.m}" 
+                    ar ar-modes="scene-viewer quick-look webxr" 
+                    ar-scale="auto"
+                    camera-controls
+                    auto-rotate 
+                    rotation-per-second="40deg"
+                    interaction-prompt="none"
+                    style="pointer-events: none;"
+                    shadow-intensity="2">
+                    <button slot="ar-button" class="ar-btn" style="pointer-events: auto;">🥘 VEDI SUL TUO TAVOLO</button>
+                </model-viewer>
+            </div>`;
         }
         html += `<div class="item-info">
                     <div class="item-header"><h3 style="margin:0">${p.n}</h3><span class="item-price">${p.p}</span></div>

@@ -3,65 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu 3D Experience</title>
+    <title>MEYS GRILL - Menu AR</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
-        :root { --gold: #c5a059; --dark: #1a1a1a; --light: #fdfdfd; }
-        body { font-family: 'Poppins', sans-serif; margin: 0; background: var(--light); color: var(--dark); }
-        header { text-align: center; padding: 60px 20px; background: white; }
-        .logo { font-family: 'Playfair Display', serif; font-size: 2.5rem; letter-spacing: 2px; text-transform: uppercase; margin: 0; }
-        .category-title { text-align: center; padding: 20px; background: #f4f4f4; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-        .menu-grid { padding: 20px; max-width: 800px; margin: auto; }
-        .item-card { background: white; border-radius: 15px; margin-bottom: 25px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        :root { --gold: #c5a059; --dark: #1a1a1a; --bg: #fdfdfd; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background: var(--bg); color: var(--dark); }
+        
+        /* Header */
+        header { text-align: center; padding: 40px 20px; background: white; border-bottom: 1px solid #eee; }
+        .logo { font-family: 'Playfair Display', serif; font-size: 2.2rem; margin: 0; color: var(--dark); }
+        
+        /* Navigazione Categorie */
+        .category-nav { display: flex; overflow-x: auto; padding: 15px; background: white; sticky: top; position: sticky; top: 0; z-index: 100; gap: 10px; border-bottom: 1px solid #eee; }
+        .cat-link { background: #f0f0f0; padding: 8px 15px; border-radius: 20px; text-decoration: none; color: var(--dark); font-size: 0.8rem; white-space: nowrap; font-weight: 600; }
+
+        /* Contenuto Menu */
+        .menu-section { padding: 20px; max-width: 800px; margin: auto; }
+        .section-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; border-bottom: 2px solid var(--gold); display: inline-block; margin-bottom: 20px; margin-top: 20px; }
+        
+        .item-card { background: white; border-radius: 15px; margin-bottom: 30px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .item-info { padding: 20px; }
         .item-header { display: flex; justify-content: space-between; align-items: baseline; }
-        .item-price { color: var(--gold); font-weight: 600; }
-        .ar-badge { background: #e8f5e9; color: #2e7d32; padding: 4px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: 700; margin-bottom: 10px; display: inline-block; }
-        model-viewer { width: 100%; height: 350px; background: #f9f9f9; }
-        .ar-btn { background: var(--dark); color: white; border: none; width: 100%; padding: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; border-radius: 0 0 15px 15px; }
+        .item-name { font-size: 1.3rem; margin: 0; font-weight: 600; }
+        .item-price { color: var(--gold); font-weight: 600; font-size: 1.1rem; }
+        .item-desc { color: #666; font-size: 0.9rem; margin: 10px 0; line-height: 1.4; }
+        
+        /* 3D Viewer */
+        model-viewer { width: 100%; height: 300px; background: #f9f9f9; }
+        .ar-btn { background: var(--dark); color: white; border: none; width: 100%; padding: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
     </style>
 </head>
 <body>
 
 <header>
     <h1 class="logo">MEYS GRILL</h1>
-    <p>Realtà Aumentata Experience</p>
+    <p style="margin:5px 0; color:#888;">Menu Digitale & Realtà Aumentata</p>
 </header>
 
-<div class="category-title">Platos Principales</div>
+<div class="category-nav">
+    <a href="#principales" class="cat-link">Platos Principales</a>
+    <a href="#entrantes" class="cat-link">Entrantes</a>
+    <a href="#bebidas" class="cat-link">Bebidas</a>
+</div>
 
-<div class="menu-grid" id="menu-content">
+<div class="menu-section">
+    
+    <h2 id="principales" class="section-title">Platos Principales</h2>
+
     <div class="item-card">
         <model-viewer src="piatto.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls shadow-intensity="1" auto-rotate>
             <button slot="ar-button" class="ar-btn">🥘 VEDI SUL TUO TAVOLO</button>
         </model-viewer>
         <div class="item-info">
-            <div class="ar-badge">DISPONIBILE IN 3D</div>
             <div class="item-header">
-                <h2>Paella de Marisco</h2>
+                <h3 class="item-name">Paella de Marisco</h3>
                 <span class="item-price">18.50€</span>
             </div>
-            <p>Cocinada a leña con marisco fresco de la costa.</p>
+            <p class="item-desc">Riso bomba, zafferano, gamberi, cozze e calamari freschi. Cotta lentamente su fuoco a legna.</p>
         </div>
     </div>
 
     <div class="item-card">
-        <div style="background: #eee; height: 200px; display: flex; align-items: center; justify-content: center; color: #999;">
-            [Foto del Piatto]
-        </div>
         <div class="item-info">
             <div class="item-header">
-                <h2>Fideuà de Gandía</h2>
+                <h3 class="item-name">Fideuà de Gandía</h3>
                 <span class="item-price">16.00€</span>
             </div>
-            <p>Fideo fino con caldo de pescado intenso y alioli.</p>
+            <p class="item-desc">Pasta corta tipo spaghetto spezzato, cotta in un brodo ristretto di scorfano e crostacei.</p>
         </div>
     </div>
+
+    <div class="item-card">
+        <div class="item-info">
+            <div class="item-header">
+                <h3 class="item-name">Arroz a Banda</h3>
+                <span class="item-price">17.00€</span>
+            </div>
+            <p class="item-desc">Riso saporitissimo cotto nel fondo di pesce, servito con salsa alioli artigianale.</p>
+        </div>
+    </div>
+
+    <h2 id="entrantes" class="section-title">Entrantes</h2>
+    <div class="item-card">
+        <div class="item-info">
+            <div class="item-header">
+                <h3 class="item-name">Gambas al Ajillo</h3>
+                <span class="item-price">12.00€</span>
+            </div>
+            <p class="item-desc">Gamberetti saltati in olio d'oliva extravergine, aglio e peperoncino.</p>
+        </div>
+    </div>
+
+    <h2 id="bebidas" class="section-title">Bebidas</h2>
+    <div class="item-card">
+        <div class="item-info">
+            <div class="item-header">
+                <h3 class="item-name">Vino Blanco Albariño</h3>
+                <span class="item-price">22.00€</span>
+            </div>
+            <p class="item-desc">Bottiglia di vino bianco fresco, perfetto per accompagnare i frutti di mare.</p>
+        </div>
+    </div>
+
 </div>
 
 <footer style="text-align: center; padding: 40px; color: #ccc; font-size: 0.8rem;">
-    Powered by Mirko 3D Menu Tech
+    Powered by Mirko Tech 3D
 </footer>
 
 </body>

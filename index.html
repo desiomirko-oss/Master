@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu AR Pro - Immersivo</title>
+    <title>Menu AR - Pro</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
@@ -18,48 +18,35 @@
             --font-c: 'Poppins', sans-serif;
         }
 
-        body { font-family: var(--font-c); margin: 0; background: var(--sfondo); color: var(--testo); }
+        body { font-family: var(--font-c); margin: 0; background: var(--sfondo); color: var(--testo); -webkit-tap-highlight-color: transparent; }
         header { text-align: center; padding: 25px 20px; background: white; border-bottom: 1px solid #eee; }
         .logo-testo { font-family: var(--font-t); font-size: 2rem; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
         
         .screen { display: none; min-height: 100vh; padding: 20px; box-sizing: border-box; }
         .screen.active { display: block; animation: fadeIn 0.4s ease; }
 
-        /* LISTE E CARD */
         .grid-flex { display: flex; flex-direction: column; gap: 15px; }
         .card-macro { height: 180px; border-radius: 20px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
         .card-macro img { position: absolute; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.5); }
-        .card-macro span { position: relative; color: white; font-size: 2rem; font-family: var(--font-t); z-index: 2; }
+        .card-macro span { position: relative; color: white; font-size: 2.2rem; font-family: var(--font-t); z-index: 2; }
 
         /* SCHEDA PIATTO */
-        .item-card { background: white; border-radius: 25px; margin-bottom: 30px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); position: relative; }
+        .item-card { background: white; border-radius: 25px; margin-bottom: 30px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
         
-        /* Contenitore Immagine: Blocca l'interazione 3D in anteprima */
-        .media-box { width: 100%; height: 320px; position: relative; overflow: hidden; }
+        .media-box { width: 100%; height: 320px; position: relative; }
         
-        /* Sovrascriviamo il model-viewer per mostrare SOLO la foto */
-        model-viewer {
-            width: 100%;
-            height: 100%;
-            --poster-color: transparent;
-            pointer-events: none; /* Disabilita ogni tocco sul 3D in anteprima */
-        }
+        /* IL TRUCCO: Foto sopra, 3D sotto solo per l'AR */
+        .foto-piatto { width: 100%; height: 100%; background-size: cover; background-position: center; position: absolute; top:0; left:0; z-index: 1; }
+        
+        model-viewer { width: 100%; height: 100%; position: absolute; top:0; left:0; z-index: 2; --poster-color: transparent; }
 
-        .foto-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-size: cover;
-            background-position: center;
-            z-index: 1;
-        }
-
+        /* Tasto AR sempre visibile e cliccabile */
         .ar-button { 
             background: var(--btn-ar); color: white; border: none; padding: 16px 28px; 
             font-weight: 700; cursor: pointer; border-radius: 50px;
             position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
-            display: flex; align-items: center; gap: 10px; 
-            z-index: 10; /* Sopra la foto */
-            box-shadow: 0 5px 20px rgba(0,0,0,0.4); pointer-events: auto;
+            display: flex; align-items: center; gap: 10px; z-index: 10;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
         }
 
         .info-pasto { padding: 20px; }
@@ -91,13 +78,9 @@
 </div>
 
 <script>
-/* =========================================================================
-   PANNELLO DI CONTROLLO (Personalizza qui)
-   ========================================================================= */
 const CONFIG = {
     nomeRistorante: "MEYS GRILL",
     colori: { primario: "#c5a059", bottoneAR: "#1a1a1a" },
-    
     menu: {
         food: {
             label: "FOOD",
@@ -105,16 +88,16 @@ const CONFIG = {
             categorie: [
                 {
                     id: "cat1",
-                    nome: "Platos Principales",
+                    nome: "Principales",
                     foto: "https://images.unsplash.com/photo-1512058560566-427a19db01cc?w=400",
                     piatti: [
                         { 
                             nome: "Paella de Marisco", 
                             prezzo: "18.50€", 
-                            desc: "Ricetta tradizionale Burriana con frutti di mare freschi.", 
+                            desc: "Ricetta tradizionale con pesce fresco.", 
                             allergie: "🦐 🐚 🐟", 
-                            fotoPiatto: "https://images.unsplash.com/photo-1534080564583-6be75777b70a?w=600", // FOTO CHE VUOI TU
-                            modello3d: "piatto.glb" // MODELLO CHE SI VEDE SOLO IN AR
+                            fotoPiatto: "https://images.unsplash.com/photo-1534080564583-6be75777b70a?w=600", 
+                            modello3d: "piatto.glb" 
                         }
                     ]
                 }
@@ -137,19 +120,12 @@ const CONFIG = {
     }
 };
 
-/* =========================================================================
-   LOGICA AUTOMATIZZATA
-   ========================================================================= */
-
 function init() {
     document.getElementById('brand-name').innerText = CONFIG.nomeRistorante;
     const l = document.getElementById('landing-options');
+    l.innerHTML = '';
     for (let key in CONFIG.menu) {
-        l.innerHTML += `
-            <div class="card-macro" onclick="showCategories('${key}')">
-                <img src="${CONFIG.menu[key].img}">
-                <span>${CONFIG.menu[key].label}</span>
-            </div>`;
+        l.innerHTML += `<div class="card-macro" onclick="showCategories('${key}')"><img src="${CONFIG.menu[key].img}"><span>${CONFIG.menu[key].label}</span></div>`;
     }
 }
 
@@ -172,29 +148,25 @@ function showItems(catId) {
 
     cat.piatti.forEach(p => {
         let card = `<div class="item-card">`;
-        
         card += `<div class="media-box">`;
+        
         if(p.modello3d) {
-            // Qui il model-viewer carica la foto come POSTER e blocca i tocchi (pointer-events: none)
+            // Qui usiamo il model-viewer SOLO per il tasto AR. L'anteprima è coperta dalla foto.
             card += `
-                <model-viewer src="${p.modello3d}" 
-                    ar ar-modes="scene-viewer quick-look webxr" 
-                    ar-placement="floor" ar-scale="auto"
-                    interaction-prompt="none" loading="lazy">
-                    <div slot="poster" class="foto-copertina" style="background-image:url('${p.fotoPiatto}')"></div>
+                <div class="foto-piatto" style="background-image:url('${p.fotoPiatto}')"></div>
+                <model-viewer src="${p.modello3d}" ar ar-modes="scene-viewer quick-look webxr" ar-placement="floor" ar-scale="auto">
                     <button slot="ar-button" class="ar-button">🥘 VEDI SUL TAVOLO</button>
                 </model-viewer>`;
         } else {
-            card += `<div class="foto-copertina" style="background-image:url('${p.fotoPiatto}')"></div>`;
+            card += `<div class="foto-piatto" style="background-image:url('${p.fotoPiatto}')"></div>`;
         }
         card += `</div>`;
 
-        card += `
-            <div class="info-pasto">
-                <div class="header-pasto"><h3>${p.nome}</h3><span class="prezzo">${p.prezzo}</span></div>
-                <div class="allergens">${p.allergie}</div>
-                <p class="desc">${p.desc}</p>
-            </div></div>`;
+        card += `<div class="info-pasto">
+                    <div class="header-pasto"><h3>${p.nome}</h3><span class="prezzo">${p.prezzo}</span></div>
+                    <div class="allergens">${p.allergie}</div>
+                    <p class="desc">${p.desc}</p>
+                 </div></div>`;
         container.innerHTML += card;
     });
 

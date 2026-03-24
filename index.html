@@ -4,83 +4,168 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MEYS GRILL - Menu AR</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
     <style>
-        :root { --rosso: #ff0000; --oro: #c5a059; --nero: #1a1a1a; --bg: #f8f8f8; --font-t: 'Playfair Display', serif; --font-c: 'Poppins', sans-serif; }
-        body { font-family: var(--font-c); margin: 0; background: var(--bg); color: var(--nero); -webkit-tap-highlight-color: transparent; }
-        header { text-align: center; padding: 20px; background: white; border-bottom: 2px solid var(--rosso); }
-        .logo { font-family: var(--font-t); font-size: 1.8rem; margin: 0; }
-        .screen { display: none; padding: 20px; animation: fadeIn 0.3s ease; }
-        .screen.active { display: block; }
-        .btn-back { padding: 10px 0; color: var(--rosso); font-weight: 700; cursor: pointer; display: inline-block; text-transform: uppercase; font-size: 0.8rem; }
-        .cat-card { height: 150px; border-radius: 15px; position: relative; overflow: hidden; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .cat-card img { position: absolute; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.5); }
-        .cat-card span { position: relative; color: white; font-size: 2rem; font-family: var(--font-t); z-index: 2; }
-        .food-card { background: white; border-radius: 20px; margin-bottom: 25px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.08); position: relative; }
+        :root {
+            --colore-principale: #ff0000; /* ROSSO per i prezzi e dettagli */
+            --colore-sfondo: #f8f8f8;
+            --colore-testo: #1a1a1a;
+            --colore-pulsante: #ff0000;   /* ROSSO per il pulsante AR */
+            --font-titoli: 'Playfair Display', serif;
+            --font-corpo: 'Poppins', sans-serif;
+        }
+
+        body { font-family: var(--font-corpo); margin: 0; background: var(--colore-sfondo); color: var(--colore-testo); -webkit-tap-highlight-color: transparent; }
+        
+        header { text-align: center; padding: 25px 20px; background: white; border-bottom: 2px solid var(--colore-principale); }
+        .logo-testo { font-family: var(--font-titoli); font-size: 2.2rem; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+
+        .screen { display: none; min-height: 100vh; padding: 20px; box-sizing: border-box; }
+        .screen.active { display: block; animation: fadeIn 0.4s ease; }
+
+        .btn-macro { height: 180px; border-radius: 20px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .btn-macro img { position: absolute; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.5); }
+        .btn-macro span { position: relative; color: white; font-size: 2.5rem; font-family: var(--font-titoli); z-index: 2; }
+
+        .cat-card { height: 130px; border-radius: 15px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .cat-card img { position: absolute; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6); }
+        .cat-card span { position: relative; color: white; font-size: 1.8rem; font-family: var(--font-titoli); }
+
+        .item-card { background: white; border-radius: 20px; margin-bottom: 30px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.08); position: relative; }
         .media-box { width: 100%; height: 300px; position: relative; background-size: cover; background-position: center; }
-        model-viewer { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 5; --poster-color: transparent; }
-        .ar-btn { background: var(--rosso) !important; color: white !important; border: none; padding: 15px 25px; border-radius: 50px; position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 999 !important; font-weight: 800; font-size: 0.9rem; box-shadow: 0 4px 20px rgba(255, 0, 0, 0.4); display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .drink-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #eee; align-items: center; }
+        
+        model-viewer { width: 100%; height: 100%; position: absolute; top:0; left:0; z-index: 5; --poster-color: transparent; }
+
+        .ar-btn { 
+            background: var(--colore-pulsante) !important; color: white !important; border: none; padding: 16px 25px; 
+            font-weight: 700; cursor: pointer; border-radius: 50px;
+            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+            z-index: 999; box-shadow: 0 8px 20px rgba(255,0,0,0.4); font-family: var(--font-corpo);
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        /* STILE LISTA DRINK */
+        .drink-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #ddd; }
         .drink-name { font-weight: 600; font-size: 1.1rem; }
-        .drink-desc { font-size: 0.8rem; color: #777; }
-        .drink-price { font-weight: 700; color: var(--nero); }
+        .drink-price { color: var(--colore-principale); font-weight: 700; }
+
+        .back-bar { padding: 12px 20px; color: var(--colore-principale); cursor: pointer; font-weight: 600; margin-bottom: 15px; display: inline-block; text-transform: uppercase; font-size: 0.8rem; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
-<header><h1 class="logo">MEYS GRILL</h1></header>
-<div id="scr-home" class="screen active"><div id="home-options"></div></div>
+
+<header><h1 class="logo-testo">MEYS GRILL</h1></header>
+
+<div id="scr-landing" class="screen active">
+    <div class="btn-macro" onclick="navToCategories('food')">
+        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600"><span>FOOD</span>
+    </div>
+    <div class="btn-macro" onclick="navToCategories('drinks')">
+        <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600"><span>DRINKS</span>
+    </div>
+</div>
+
+<div id="scr-categories" class="screen">
+    <div class="back-bar" onclick="navToLanding()">← HOME</div>
+    <div id="cat-list"></div>
+</div>
+
 <div id="scr-items" class="screen">
-    <div class="btn-back" onclick="location.reload()">← MENU</div>
-    <div id="items-title" style="font-family:var(--font-t); font-size: 2rem; margin-bottom: 20px; border-bottom: 3px solid var(--rosso); display: inline-block;"></div>
+    <div id="back-to-cat" class="back-bar">← CATEGORIE</div>
     <div id="items-list"></div>
 </div>
+
 <script>
 const CONFIG = {
-    // LINK RAW CORRETTO DALLA TUA FOTO (Branch "principale")
-    BASE_URL_3D: "https://raw.githubusercontent.com/desiomirko-oss/Modelli-3D/principale/",
+    // LINK ALLA TUA REPOSITORY MODELLI (Branch 'principale')
+    // Nota: Ho aggiunto %20 perché la tua repo si chiama "Modelli 3D" con lo spazio
+    BASE_URL_3D: "https://raw.githubusercontent.com/Maestro/Modelli%203D/principale/",
+
     menu: {
-        food: {
-            label: "CIBO",
-            img: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600",
-            piatti: [
-                { n: "Paella de Marisco", p: "18.50€", a: "🦐 🐚 🐟", d: "Cucinata a leña con marisco fresco.", f: "https://images.unsplash.com/photo-1534080564583-6be75777b70a?w=600", m: "test.glb" }
-            ]
-        },
-        drinks: {
-            label: "BEVANDE",
-            img: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600",
-            piatti: [
-                { n: "Albariño D.O.", p: "22€", d: "Vino bianco Galiziano.", a: "🍷" },
-                { n: "Rioja Reserva", p: "28€", d: "Rosso strutturato.", a: "🍷" }
-            ]
-        }
+        food: [
+            { 
+                id: "principali", nome: "Platos Principales", foto: "https://images.unsplash.com/photo-1512058560566-427a19db01cc?w=400",
+                piatti: [
+                    { 
+                        n: "Paella de Marisco", p: "18.50€", a: "🦐, 🐚, 🐟", 
+                        d: "Cucinata a leña con marisco fresco de la costa.", 
+                        f: "https://images.unsplash.com/photo-1534080564583-6be75777b70a?w=600",
+                        m: "test.glb" // Il file test caricato nella tua repo Modelli 3D
+                    }
+                ]
+            }
+        ],
+        drinks: [
+            { 
+                id: "vini", nome: "Vini Bianchi", foto: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400",
+                piatti: [{ n: "Albariño D.O.", p: "22.00€", d: "Vino fresco Galiziano.", a: "🍷" }]
+            }
+        ]
     }
 };
 
-function init() {
-    const home = document.getElementById('home-options');
-    for (let key in CONFIG.menu) {
-        home.innerHTML += `<div class="cat-card" onclick="showCategory('${key}')"><img src="${CONFIG.menu[key].img}"><span>${CONFIG.menu[key].label}</span></div>`;
-    }
+let currentMacro = 'food';
+
+function navToLanding() { 
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('scr-landing').classList.add('active');
 }
-function showCategory(key) {
-    const data = CONFIG.menu[key];
-    document.getElementById('items-title').innerText = data.label;
-    const list = document.getElementById('items-list');
-    list.innerHTML = '';
-    data.piatti.forEach(p => {
-        if (key === 'food') {
-            list.innerHTML += `<div class="food-card"><div class="media-box" style="background-image: url('${p.f}')">${p.m ? `<model-viewer src="${CONFIG.BASE_URL_3D + p.m}" ar ar-modes="scene-viewer quick-look webxr" ar-placement="floor" ar-scale="auto" interaction-prompt="none" reveal="manual"><button slot="ar-button" class="ar-btn">🥘 VEDI SUL TAVOLO</button></model-viewer>` : ''}</div><div style="padding:15px;"><div style="display:flex; justify-content:space-between;"><b>${p.n}</b><span style="color:var(--rosso); font-weight:700;">${p.p}</span></div><p style="font-size:0.8rem; color:#666;">${p.d}</p></div></div>`;
-        } else {
-            list.innerHTML += `<div class="drink-row"><div><div class="drink-name">${p.n} ${p.a}</div><div class="drink-desc">${p.d}</div></div><div class="drink-price">${p.p}</div></div>`;
-        }
+
+function navToCategories(type) {
+    currentMacro = type;
+    const container = document.getElementById('cat-list');
+    container.innerHTML = '';
+    CONFIG.menu[type].forEach(cat => {
+        container.innerHTML += `<div class="cat-card" onclick="navToItems('${cat.id}')"><img src="${cat.foto}"><span>${cat.nome}</span></div>`;
     });
-    document.getElementById('scr-home').classList.remove('active');
-    document.getElementById('scr-items').classList.add('active');
+    switchScreen('scr-categories');
 }
-init();
+
+function navToItems(catId) {
+    const catObj = CONFIG.menu[currentMacro].find(c => c.id === catId);
+    const container = document.getElementById('items-list');
+    container.innerHTML = `<h2 style="font-family:var(--font-titoli); font-size:2rem; margin-bottom:20px;">${catObj.nome}</h2>`;
+    
+    catObj.piatti.forEach(p => {
+        let html = '';
+        if (currentMacro === 'food') {
+            html = `<div class="item-card">
+                        <div class="media-box" style="background-image: url('${p.f}');">
+                            ${p.m ? `
+                            <model-viewer src="${CONFIG.BASE_URL_3D + p.m}" ar ar-modes="scene-viewer quick-look webxr" ar-placement="floor" ar-scale="auto" interaction-prompt="none" reveal="manual">
+                                <button slot="ar-button" class="ar-btn">🥘 VEDI SUL TAVOLO</button>
+                            </model-viewer>` : ''}
+                        </div>
+                        <div style="padding:20px;">
+                            <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                                <h3 style="margin:0">${p.n}</h3><span style="color:var(--colore-principale); font-weight:700;">${p.p}</span>
+                            </div>
+                            <div style="margin:10px 0;">${p.a}</div>
+                            <p style="font-size:0.9rem; color:#666;">${p.d}</p>
+                        </div>
+                    </div>`;
+        } else {
+            // Layout solo testo per i Drink
+            html = `<div class="drink-row">
+                        <div><div class="drink-name">${p.n} ${p.a}</div><div style="font-size:0.8rem; color:#666;">${p.d}</div></div>
+                        <div class="drink-price">${p.p}</div>
+                    </div>`;
+        }
+        container.innerHTML += html;
+    });
+    document.getElementById('back-to-cat').onclick = () => navToCategories(currentMacro);
+    switchScreen('scr-items');
+}
+
+function switchScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0,0);
+}
 </script>
 </body>
 </html>

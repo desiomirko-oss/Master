@@ -182,4 +182,33 @@ function showItems(catId) {
                     ar-placement="floor" ar-scale="auto"
                     interaction-prompt="none" loading="lazy">
                     <div slot="poster" class="foto-copertina" style="background-image:url('${p.fotoPiatto}')"></div>
-                    <button
+                    <button slot="ar-button" class="ar-button">🥘 VEDI SUL TAVOLO</button>
+                </model-viewer>`;
+        } else {
+            card += `<div class="foto-copertina" style="background-image:url('${p.fotoPiatto}')"></div>`;
+        }
+        card += `</div>`;
+
+        card += `
+            <div class="info-pasto">
+                <div class="header-pasto"><h3>${p.nome}</h3><span class="prezzo">${p.prezzo}</span></div>
+                <div class="allergens">${p.allergie}</div>
+                <p class="desc">${p.desc}</p>
+            </div></div>`;
+        container.innerHTML += card;
+    });
+
+    document.getElementById('back-to-cat-trigger').onclick = () => showCategories(activeMacro);
+    switchScreen('scr-items');
+}
+
+function switchScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0,0);
+}
+
+init();
+</script>
+</body>
+</html>

@@ -3,73 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meys Grill - Menu AR Completo</title>
+    <title>Meys Grill - Menu Facile</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
     <style>
+        /* PARTE 1: I COLORI E LO STILE. Puoi cambiare i codici colore qui sotto */
         :root {
-            --colore-principale: #c5a059; --colore-sfondo: #f8f8f8;
-            --colore-testo: #1a1a1a; --colore-pulsante: #1a1a1a;
-            --font-titoli: 'Playfair Display', serif; --font-corpo: 'Poppins', sans-serif;
+            --colore-oro: #c5a059; 
+            --colore-nero: #1a1a1a;
+            --sfondo-grigio: #f8f8f8;
         }
-        body { font-family: var(--font-corpo); margin: 0; background: var(--colore-sfondo); color: var(--colore-testo); }
-        header { text-align: center; padding: 20px; background: white; border-bottom: 1px solid #ddd; position: sticky; top: 0; z-index: 100; }
-        .logo-testo { font-family: var(--font-titoli); font-size: 1.8rem; margin: 0; text-transform: uppercase; }
+
+        body { font-family: 'Poppins', sans-serif; margin: 0; background: var(--sfondo-grigio); }
+        header { text-align: center; padding: 20px; background: white; border-bottom: 1px solid #ddd; }
         .screen { display: none; padding: 20px; max-width: 600px; margin: 0 auto; }
-        .screen.active { display: block; animation: fadeIn 0.4s ease; }
-        .cat-card { height: 150px; border-radius: 15px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .screen.active { display: block; }
+        
+        /* Stile per i "Bottoni" delle Categorie */
+        .cat-card { height: 150px; border-radius: 15px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; cursor: pointer; }
         .cat-card img { position: absolute; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6); }
-        .cat-card span { position: relative; color: white; font-size: 1.8rem; font-family: var(--font-titoli); text-shadow: 1px 1px 4px rgba(0,0,0,0.7); }
-        .item-card { background: white; border-radius: 20px; margin-bottom: 25px; overflow: hidden; box-shadow: 0 8px 15px rgba(0,0,0,0.06); }
+        .cat-card span { position: relative; color: white; font-size: 1.8rem; font-family: 'Playfair Display', serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
+
+        /* Stile per le schede dei piatti */
+        .item-card { background: white; border-radius: 20px; margin-bottom: 25px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .foto-piatto { width: 100%; height: 220px; background-size: cover; background-position: center; position: relative; }
         .item-info { padding: 15px; }
-        .item-header { display: flex; justify-content: space-between; align-items: baseline; }
-        .item-price { color: var(--colore-principale); font-weight: 700; font-size: 1.1rem; }
-        .ar-btn { background: var(--colore-pulsante); color: white; border: none; padding: 10px; border-radius: 50px; position: absolute; bottom: 15px; left: 10%; width: 80%; font-weight: bold; cursor: pointer; }
-        .back-btn { color: var(--colore-principale); cursor: pointer; font-weight: 600; margin-bottom: 15px; display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .ar-btn { background: var(--colore-nero); color: white; border: none; padding: 12px; border-radius: 50px; position: absolute; bottom: 15px; left: 10%; width: 80%; font-weight: bold; cursor: pointer; }
+        .back-btn { color: var(--colore-oro); cursor: pointer; font-weight: 600; margin-bottom: 15px; display: inline-block; }
     </style>
 </head>
 <body>
 
-<header><h1 class="logo-testo">MEYS GRILL</h1></header>
+<header><h1>MEYS GRILL</h1></header>
 
 <div id="scr-categories" class="screen active">
     <div id="cat-list">
+        
         <div class="cat-card" onclick="navToItems('Platos Principales')">
-            <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD...INCOLLA_DA_CATEGORIE_CSV..." alt="Platos Principales">
+            <img src="METTI_QUI_IL_CODICE_DELLA_FOTO_CATEGORIA" alt="Principales">
             <span>PLATOS PRINCIPALES</span>
+            
+        <div class="cat-card" onclick="navToItems('Entradas')">
+            <img src="METTI_QUI_IL_CODICE_DELLA_FOTO_CATEGORIA" alt="Entradas">
+            <span>ENTRADAS</span>
         </div>
         </div>
 </div>
 
 <div id="scr-items" class="screen">
-    <span class="back-btn" onclick="showCategories()">← TORNA ALLE CATEGORIE</span>
+    <span class="back-btn" onclick="showCategories()">← TORNA INDIETRO</span>
     <div id="items-list"></div>
 </div>
 
 <script>
-// Database completo estratto dai tuoi file [cite: 2, 5]
+/* PARTE 2: I DATI DEI PIATTI */
+/* Qui sotto aggiungi i piatti per ogni categoria. 
+   IMPORTANTE: Il nome della categoria deve essere lo stesso scritto sopra (es: 'Platos Principales') */
+
 const MENU_DATA = {
+    
     "Platos Principales": [
         {
-            nome: "Paella de Marisco Estilo Burriana",
+            nome: "Paella de Marisco",
             prezzo: "18.50€",
-            desc: "Cocinada a leña con marisco fresco de la costa.",
+            desc: "Cucinata a legna con frutti di mare.",
             allergeni: "🦐, 🐚, 🐟",
-            foto: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD...INCOLLA_DA_MENU_CSV...",
-            modello: "https://desiomirko-oss.github.io/Modelli-3d/paella.glb" // Ho aggiunto .glb per compatibilità
+            foto: "METTI_QUI_IL_CODICE_DELLA_FOTO_PIATTO",
+            modello: "https://desiomirko-oss.github.io/Modelli-3d/paella.glb" 
+        },
+        /* Per aggiungere un altro piatto, copia il blocco { ... } qui sopra e incollalo qui sotto mettendo una virgola prima */
+    ],
+
+    /* PER AGGIUNGERE UNA NUOVA LISTA DI PIATTI, SCRIVI COSÌ:
+    "Antipasti": [
+        {
+            nome: "Nome Piatto",
+            prezzo: "10€",
+            desc: "Descrizione...",
+            allergeni: "",
+            foto: "codice_foto...",
+            modello: ""
         }
-        // Qui verranno inseriti tutti gli altri piatti presenti nel file Menu (1).csv
-    ]
+    ], 
+    */
 };
 
+/* FUNZIONI DI NAVIGAZIONE (Non toccare, servono a far funzionare i clic) */
 function navToItems(catId) {
     const list = document.getElementById('items-list');
-    list.innerHTML = `<h2 style="font-family:var(--font-titoli)">${catId}</h2>`;
+    list.innerHTML = `<h2 style="font-family:'Playfair Display'">${catId}</h2>`;
     
+    if(!MENU_DATA[catId]) return;
+
     MENU_DATA[catId].forEach(p => {
         list.innerHTML += `
             <div class="item-card">
@@ -79,18 +106,19 @@ function navToItems(catId) {
                     <button slot="ar-button" class="ar-btn">✨ VEDI SUL TAVOLO</button>
                 </model-viewer>` : `<div class="foto-piatto" style="background-image: url('${p.foto}');"></div>`}
                 <div class="item-info">
-                    <div class="item-header">
-                        <h3>${p.nome}</h3>
-                        <span class="item-price">${p.prezzo}</span>
+                    <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                        <h3 style="margin:0">${p.nome}</h3>
+                        <span style="color:#c5a059; font-weight:700">${p.prezzo}</span>
                     </div>
-                    <p style="font-size:0.9rem; color:#666;">${p.desc}</p>
-                    <div style="margin-top:10px;">${p.allergeni}</div>
+                    <p style="font-size:0.9rem; color:#666; margin:10px 0;">${p.desc}</p>
+                    <div style="font-size:1.1rem">${p.allergeni}</div>
                 </div>
             </div>`;
     });
     
     document.getElementById('scr-categories').classList.remove('active');
     document.getElementById('scr-items').classList.add('active');
+    window.scrollTo(0,0);
 }
 
 function showCategories() {

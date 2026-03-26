@@ -1,38 +1,31 @@
 const APP_CONFIG = {
-    testoLogo: "EXPERIENCE AR",  // Appare se logoURL è vuoto
-    logoURL: "logo.png",       // Lascia "" per usare il testo, o metti l'URL per l'immagine
-    colori: { principale: "#c0392b" }
+    testoLogo: "AR MENU ELITE",
+    logoURL: "", // Lascia vuoto per il testo, metti "logo.png" per l'immagine
+    colori: { 
+        principale: "#d4af37", 
+        testo: "#f4f4f4", 
+        sfondo: "#121212" 
+    }
 };
 
 const MENU_DATA = {
     food: [
         { 
-            id: "specialità", 
+            id: "antipasti", 
+            nome: { it: "Antipasti", es: "Entrantes" },
+            foto: "https://images.unsplash.com/photo-1544124499-58912cbddade?w=800", // FOTO SOTTOCATEGORIA
             piatti: [
-                { 
-                    n: "Salmone al Pepe Rosa", 
-                    p: "18€", 
-                    d: "Salmone fresco scottato con granella di pepe rosa e asparagi croccanti.", 
-                    f: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600",
-                    m: "modello_test.glb", // Assicurati che il nome file sia identico su GitHub
-                    glutenFree: true 
-                }
+                { n: "Polpo alla Gallega", p: "23.00 €", d: "Polpo e patate", a: "Molluschi", f: "https://images.unsplash.com/photo-1599481238505-b8b0537a3f77?w=800", m: "" }
             ]
         }
     ],
     drinks: [
         { 
-            id: "cocktails", 
+            id: "vini", 
+            nome: { it: "I Nostri Vini", es: "Vinos" },
+            foto: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800", // FOTO SOTTOCATEGORIA
             piatti: [
-                { 
-                    n: "Virgin Mojito", 
-                    p: "7€", 
-                    d: "Menta fresca, lime, zucchero di canna e soda.", 
-                    f: "", 
-                    m: "", 
-                    bio: true,
-                    analcolico: true 
-                }
+                { n: "Vino Rosso", p: "18.00 €", d: "Calice di vino", a: "Solfiti", f: "", m: "" }
             ]
         }
     ]

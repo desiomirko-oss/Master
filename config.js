@@ -1,48 +1,60 @@
-/* CONFIGURAZIONE PROTOTIPO ELITE (Prompt 1) */
+/* CONFIGURAZIONE PROTOTIPO ELITE */
 const APP_CONFIG = {
     testoLogo: "AR MENU ELITE",
     colori: { 
-        principale: "#d4af37", // Oro Metallico
+        principale: "#d4af37", // Oro
         testo: "#f4f4f4",      // Avorio
-        sfondo: "#121212"      // Antracite scuro
+        sfondo: "#121212"      // Antracite
     }
 };
 
-/* TRADUZIONI (Prompt 3) */
 const UI_TRANSLATIONS = {
-    it: { home: "Benvenuto", cat: "Menu", food: "Cucina Gourmet", drinks: "Mixology & Vini", ar: "SCOPRI IN 3D", install: "SCARICA APP", install_desc: "Vivi l'esperienza completa installando l'app sul tuo smartphone.", btn_web: "Continua nel browser" },
-    es: { home: "Bienvenido", cat: "Menú", food: "Cocina Gourmet", drinks: "Mixology & Vinos", ar: "DESCUBRE EN 3D", install: "INSTALAR APP", install_desc: "Vive la experiencia completa instalando la app en tu smartphone.", btn_web: "Continuar en web" }
+    it: { home: "Home", cat: "Menu", food: "Cucina", drinks: "Cantina", ar: "VEDI IN 3D", install: "INSTALLA APP", install_desc: "Scarica l'app per un'esperienza fluida.", btn_web: "Continua nel browser" },
+    es: { home: "Inicio", cat: "Menú", food: "Cocina", drinks: "Bodega", ar: "VER EN 3D", install: "INSTALAR APP", install_desc: "Descarga la app para una experiencia fluida.", btn_web: "Continuar en web" }
 };
 
-/* SELEZIONE PIATTI PROTOTIPO (Prompt 2) */
 const MENU_DATA = {
     food: [
         { 
-            id: "signature", 
-            nome: { it: "Piatti Signature", es: "Platos Signature" },
+            id: "entrantes", 
+            nome: { it: "Antipasti Gourmet", es: "Entrantes" },
             piatti: [
-                { n: "Pulpo a la Gallega", p: "23.00 €", d: "Polpo tenero su letto di patate schiacciate, pimenton de la Vera e olio EVO.", a: "Molluschi", f: "https://images.unsplash.com/photo-1599481238505-b8b0537a3f77?w=800", m: "test.glb" },
-                { n: "Secreto Ibérico", p: "21.90 €", d: "Taglio nobile di maiale iberico grigliato, servito con verdure baby croccanti.", a: "", f: "https://images.unsplash.com/photo-1544124499-58912cbddade?w=800", m: "", glutenFree: true },
-                { n: "Salmón a la Mostaza", p: "21.90 €", d: "Salmone fresco in crosta di erbe con riduzione alla senape antica.", a: "Pesce, Senape", f: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=800", m: "", glutenFree: true }
+                { n: "Pulpo a la Gallega", p: "23.00 €", d: "Polpo tenero, patate, pimenton e olio EVO.", a: "Molluschi", f: "https://images.unsplash.com/photo-1599481238505-b8b0537a3f77?w=800", m: "test.glb" },
+                { n: "Gambas al Pil-Pil", p: "12.90 €", d: "Gamberi all'aglio piccanti in olio bollente.", a: "Crostacei", f: "", m: "" }
             ]
         },
         { 
-            id: "tradizione", 
-            nome: { it: "Tradizione & Riso", es: "Tradición y Arroz" },
+            id: "pescados", 
+            nome: { it: "Dal Mare", es: "Pescados" },
             piatti: [
-                { n: "Paella de Marisco", p: "18.90 €", d: "Il classico della costa: riso bomba, gamberi, cozze e calamari freschi.", a: "Pesce, Crostacei", f: "https://images.unsplash.com/photo-1534080564607-c9275469479c?w=800", m: "" },
-                { n: "Lasagna de Verduras", p: "14.90 €", d: "Pasta fresca artigianale con ortaggi di stagione e besciamella leggera.", a: "Glutine, Latticini", f: "", m: "", bio: true }
+                { n: "Salmón a la Mostaza", p: "21.90 €", d: "Salmone fresco con riduzione alla senape.", a: "Pesce, Senape", f: "", m: "", glutenFree: true },
+                { n: "Lubina Thai", p: "22.90 €", d: "Branzino con verdure e aromi orientali.", a: "Pesce, Soia", f: "", m: "" }
+            ]
+        },
+        { 
+            id: "carnes", 
+            nome: { it: "Le Carni", es: "Carnes" },
+            piatti: [
+                { n: "Secreto Ibérico", p: "21.90 €", d: "Taglio pregiato di maiale iberico alla griglia.", a: "", f: "", m: "", glutenFree: true },
+                { n: "Entrecot de Ternera", p: "23.90 €", d: "Controfiletto di vitello ai ferri.", a: "", f: "", m: "" }
             ]
         }
     ],
     drinks: [
         { 
-            id: "cantina", 
-            nome: { it: "Selezione Cantina", es: "Selección Bodega" },
+            id: "vinos_blancos", 
+            nome: { it: "Vini Bianchi", es: "Vinos Blancos" },
             piatti: [
-                { n: "Habla de Ti", p: "23.00 €", d: "Sauvignon Blanc. Elegante, fresco e intensamente aromatico.", a: "Solfiti", f: "", m: "", bio: true },
-                { n: "Muga Crianza", p: "36.00 €", d: "Rioja d'eccellenza. Note di frutti rossi e vaniglia.", a: "Solfiti", f: "", m: "" },
-                { n: "Protos Roble", p: "20.00 €", d: "Ribera del Duero dal carattere deciso e persistente.", a: "Solfiti", f: "", m: "" }
+                { n: "Habla de Ti", p: "23.00 €", d: "Sauvignon Blanc aromatico.", a: "Solfiti", f: "", m: "", bio: true },
+                { n: "Campo Fiori", p: "17.00 €", d: "Frizzante semi-dolce.", a: "Solfiti", f: "", m: "" }
+            ]
+        },
+        { 
+            id: "vinos_tintos", 
+            nome: { it: "Vini Rossi", es: "Vinos Tintos" },
+            piatti: [
+                { n: "Protos Roble", p: "20.00 €", d: "Ribera del Duero deciso.", a: "Solfiti", f: "", m: "" },
+                { n: "Muga Crianza", p: "36.00 €", d: "Rioja d'eccellenza.", a: "Solfiti", f: "", m: "" }
             ]
         }
     ]

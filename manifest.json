@@ -1,11 +1,10 @@
 {
-  "name": "Menu Osteria Roma",
-  "short_name": "Osteria",
-  "description": "Menu in Realtà Aumentata",
-  "start_url": "./index.html",
+  "name": "Menu AR Pro",
+  "short_name": "MenuAR",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#c5a059",
+  "theme_color": "#000000",
   "icons": [
     {
       "src": "icon-192.png",

@@ -1,10 +1,9 @@
-const CACHE_NAME = 'menu-ar-v1';
-// Lista dei file da salvare in memoria locale sul telefono del cliente
+const CACHE_NAME = 'v1-menu-personalizzato';
 const ASSETS = [
+  './',
   './index.html',
   './config.js',
-  './manifest.json',
-  'https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js'
+  './manifest.json'
 ];
 
 self.addEventListener('install', (e) => {

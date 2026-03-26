@@ -1,250 +1,116 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Menu Digitale AR</title>
-    
+    <title>Menu AR</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#ffffff" id="meta-theme-color">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000" id="meta-theme-color">
     <link rel="apple-touch-icon" href="icon-192.png">
-    
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
     <style>
-        :root {
-            --colore-principale: #000;
-            --colore-testo: #1a1a1a;
-            --colore-pulsante: #1a1a1a;
-            --font-titoli: 'Playfair Display', serif;
-            --font-corpo: 'Poppins', sans-serif;
-        }
-
-        body { font-family: var(--font-corpo); margin: 0; color: var(--colore-testo); -webkit-tap-highlight-color: transparent; }
+        :root { --colore-principale: #000; --colore-testo: #1a1a1a; --font-titoli: 'Playfair Display', serif; --font-corpo: 'Poppins', sans-serif; }
+        body { font-family: var(--font-corpo); margin: 0; background: #fff; -webkit-tap-highlight-color: transparent; }
         
-        /* BLOCCO DESKTOP */
-        #desktop-notice { display: none; text-align: center; padding: 40px 20px; min-height: 100vh; box-sizing: border-box; background: #f0f0f0; flex-direction: column; justify-content: center; align-items: center; }
-        #desktop-notice h2 { font-family: var(--font-titoli); font-size: 2rem; color: #333; }
-        #desktop-notice p { color: #666; font-size: 1.1rem; max-width: 400px; }
-        #desktop-notice .qr-placeholder { width: 200px; height: 200px; background: #ddd; border-radius: 20px; margin: 20px auto; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #999; }
+        /* BLOCCA DESKTOP */
+        #desktop-notice { display: none; text-align: center; padding: 50px 20px; height: 100vh; flex-direction: column; justify-content: center; align-items: center; background: #f9f9f9; }
+        @media screen and (min-width: 768px) { #app-container { display: none; } #desktop-notice { display: flex; } }
 
-        @media screen and (min-width: 768px) {
-            #app-container { display: none !important; }
-            #desktop-notice { display: flex; }
-        }
+        /* HEADER E NAV */
+        header { text-align: center; padding: 20px; border-bottom: 1px solid #eee; position: sticky; top: 0; background: white; z-index: 100; }
+        .logo-testo { font-family: var(--font-titoli); font-size: 1.5rem; margin: 0; }
+        .screen { display: none; padding: 20px; animation: fadeIn 0.3s; }
+        .screen.active { display: block; }
 
-        /* STILI APP MOBILE */
-        #app-container { display: block; }
-        header { text-align: center; padding: 20px; background: white; border-bottom: 1px solid #eee; display: flex; align-items: center; justify-content: center; min-height: 60px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .logo-container { cursor: pointer; }
-        .logo-testo { font-family: var(--font-titoli); font-size: 1.8rem; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
-        .logo-immagine { max-height: 50px; object-fit: contain; }
+        /* CARDS */
+        .btn-macro { height: 160px; border-radius: 15px; margin-bottom: 15px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; color: white; }
+        .btn-macro img { position: absolute; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.5); }
+        .btn-macro span { position: relative; font-family: var(--font-titoli); font-size: 2rem; z-index: 1; }
 
-        .screen { display: none; min-height: calc(100vh - 100px); width: 100%; padding: 20px; box-sizing: border-box; }
-        .screen.active { display: block; animation: fadeIn 0.3s ease-out; }
-
-        .landing-grid { display: flex; flex-direction: column; gap: 15px; }
-        .btn-macro { height: 180px; border-radius: 15px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-        .btn-macro img { position: absolute; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.45); transition: transform 0.3s; }
-        .btn-macro:active img { transform: scale(1.05); }
-        .btn-macro span { position: relative; color: white; font-size: 2.2rem; font-family: var(--font-titoli); z-index: 2; text-shadow: 0 4px 15px rgba(0,0,0,0.6); }
-
-        .cat-card { height: 110px; border-radius: 12px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-        .cat-card img { position: absolute; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.5); }
-        .cat-card span { position: relative; color: white; font-size: 1.5rem; font-family: var(--font-titoli); text-align: center; padding: 0 15px; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
-
-        .item-card { background: white; border-radius: 16px; margin-bottom: 25px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.06); display: flex; flex-direction: column; }
+        .item-card { background: white; border-radius: 20px; margin-bottom: 30px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .foto-piatto { width: 100%; height: 250px; background-size: cover; background-position: center; position: relative; }
         
-        .foto-piatto { width: 100%; height: 280px; background-size: cover; background-position: center; position: relative; }
-        
-        /* Model viewer invisibile finché non si preme il tasto AR */
-        model-viewer { width: 100%; height: 100%; background-color: transparent; position: absolute; top: 0; left: 0; --poster-color: transparent; }
-
-        .item-info { padding: 20px; }
-        .item-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
-        .item-header h3 { margin: 0; font-family: var(--font-titoli); font-size: 1.3rem; line-height: 1.2; }
-        .item-price { color: var(--colore-principale); font-weight: 700; font-size: 1.1rem; white-space: nowrap; }
-        .allergens { font-size: 1.1rem; margin: 8px 0; }
-        .item-desc { color: #666; font-size: 0.9rem; line-height: 1.6; margin: 0; }
-
+        /* BOTTONE AR PROFESSIONALE */
         .ar-btn { 
-            background: var(--colore-pulsante); color: white; border: none; padding: 12px 24px; 
-            font-weight: 600; border-radius: 50px; display: flex; align-items: center; justify-content: center; gap: 8px;
-            position: absolute; bottom: 15px; right: 15px; z-index: 10;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.3); font-family: var(--font-corpo); font-size: 0.85rem;
-            backdrop-filter: blur(5px); background-color: rgba(26, 26, 26, 0.85);
+            position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.7); color: white; 
+            border: none; padding: 10px 20px; border-radius: 30px; font-weight: 600; display: flex; align-items: center; gap: 8px;
+            backdrop-filter: blur(5px);
         }
+        model-viewer { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
 
-        .back-bar { padding: 12px 18px; background: white; font-weight: 600; color: var(--colore-principale); margin-bottom: 20px; border-radius: 12px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); font-size: 0.9rem; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div id="desktop-notice">
-    <h2>📱 Accesso Riservato</h2>
-    <p>Questo menu interattivo in Realtà Aumentata è progettato esclusivamente per smartphone.</p>
-    <div class="qr-placeholder">[ Il tuo QR Code qui ]</div>
-    <p>Inquadra il QR Code del ristorante per vivere l'esperienza.</p>
+    <h2>📱 Solo su Smartphone</h2>
+    <p>Scansiona il QR Code dal tuo telefono per vedere il menu in Realtà Aumentata.</p>
 </div>
 
 <div id="app-container">
-    <header>
-        <div id="header-logo" class="logo-container" onclick="location.reload()"></div>
-    </header>
+    <header id="header-logo"></header>
 
     <div id="scr-landing" class="screen active">
-        <div class="landing-grid">
-            <div class="btn-macro" onclick="navToCategories('food')">
-                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600" alt="Food">
-                <span id="lbl-food">FOOD</span>
-            </div>
-            <div class="btn-macro" onclick="navToCategories('drinks')">
-                <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600" alt="Drinks">
-                <span id="lbl-drinks">DRINKS</span>
-            </div>
-        </div>
-    </div>
-
-    <div id="scr-categories" class="screen">
-        <div id="back-to-home" class="back-bar" onclick="navToLanding()">← Home</div>
-        <div id="cat-list"></div>
+        <div id="macro-container"></div>
     </div>
 
     <div id="scr-items" class="screen">
-        <div id="back-to-cat" class="back-bar">← Categorie</div>
+        <div class="back-bar" onclick="location.reload()" style="cursor:pointer; margin-bottom:20px;">← Indietro</div>
         <div id="items-list"></div>
     </div>
 </div>
 
 <script src="config.js"></script>
-
 <script>
-let currentMacro = 'food';
-let userLang = 'en';
+    let userLang = 'it';
 
-function detectLanguage() {
-    const browserLang = (navigator.language || navigator.userLanguage).slice(0, 2).toLowerCase();
-    const supportedLangs = ['it', 'en', 'es', 'fr', 'de', 'sv', 'pl', 'zh'];
-    userLang = supportedLangs.includes(browserLang) ? browserLang : 'en';
-    document.documentElement.lang = userLang;
-}
+    function init() {
+        // Setup Colori e Logo
+        document.documentElement.style.setProperty('--colore-principale', APP_CONFIG.colori.principale);
+        const header = document.getElementById('header-logo');
+        header.innerHTML = APP_CONFIG.tipoLogo === 'testo' ? `<h1 class="logo-testo">${APP_CONFIG.testoLogo}</h1>` : `<img src="${APP_CONFIG.urlLogoImmagine}" style="max-height:50px">`;
 
-function getTesto(obj) {
-    if (typeof obj === 'string') return obj;
-    return obj[userLang] || obj['en'] || obj['it'] || "";
-}
-
-function initApp() {
-    detectLanguage();
-    
-    // Sicurezza: se config.js non è caricato, fermiamo l'app.
-    if(typeof APP_CONFIG === 'undefined') {
-        console.error("File di configurazione mancante!");
-        return;
+        // Render Macro Categorie
+        const container = document.getElementById('macro-container');
+        ['food', 'drinks'].forEach(type => {
+            if(MENU_DATA[type].length > 0) {
+                container.innerHTML += `
+                    <div class="btn-macro" onclick="showCat('${type}')">
+                        <img src="${type === 'food' ? 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500' : 'https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=500'}">
+                        <span>${UI_TRANSLATIONS[userLang][type]}</span>
+                    </div>`;
+            }
+        });
     }
 
-    const root = document.documentElement;
-    root.style.setProperty('--colore-principale', APP_CONFIG.colori.principale);
-    root.style.setProperty('--colore-testo', APP_CONFIG.colori.testo);
-    root.style.setProperty('--colore-pulsante', APP_CONFIG.colori.pulsanteAR);
-    document.getElementById('meta-theme-color').setAttribute('content', APP_CONFIG.colori.principale);
-    
-    if (APP_CONFIG.sfondo.tipo === "immagine") {
-        document.body.style.backgroundImage = `url('${APP_CONFIG.sfondo.immagine}')`;
-        document.body.style.backgroundSize = "cover";
-        document.body.style.backgroundAttachment = "fixed";
-        document.body.style.backgroundPosition = "center";
-    } else {
-        document.body.style.background = APP_CONFIG.sfondo.colore;
+    function showCat(type) {
+        const list = document.getElementById('items-list');
+        list.innerHTML = '';
+        MENU_DATA[type].forEach(cat => {
+            cat.piatti.forEach(p => {
+                list.innerHTML += `
+                    <div class="item-card">
+                        <div class="foto-piatto" style="background-image: url('${p.f}')">
+                            ${p.m ? `<model-viewer src="${p.m}" ar ar-modes="scene-viewer quick-look" reveal="manual">
+                                <button slot="ar-button" class="ar-btn">📦 ${UI_TRANSLATIONS[userLang].ar}</button>
+                            </model-viewer>` : ''}
+                        </div>
+                        <div style="padding:15px">
+                            <div style="display:flex; justify-content:space-between"><b>${p.n[userLang]}</b> <span>${p.p}</span></div>
+                            <p style="font-size:0.9rem; color:#666">${p.d[userLang]}</p>
+                        </div>
+                    </div>`;
+            });
+        });
+        document.getElementById('scr-landing').classList.remove('active');
+        document.getElementById('scr-items').classList.add('active');
     }
 
-    const headerLogo = document.getElementById('header-logo');
-    if(APP_CONFIG.tipoLogo === 'immagine') {
-        headerLogo.innerHTML = `<img src="${APP_CONFIG.urlLogoImmagine}" class="logo-immagine" alt="Logo">`;
-    } else {
-        headerLogo.innerHTML = `<h1 class="logo-testo">${APP_CONFIG.testoLogo}</h1>`;
-    }
-
-    document.getElementById('lbl-food').textContent = UI_TRANSLATIONS[userLang].food;
-    document.getElementById('lbl-drinks').textContent = UI_TRANSLATIONS[userLang].drinks;
-    document.getElementById('back-to-home').textContent = UI_TRANSLATIONS[userLang].home;
-    document.getElementById('back-to-cat').textContent = UI_TRANSLATIONS[userLang].cat;
-}
-
-function navToLanding() { switchScreen('scr-landing'); }
-
-function navToCategories(type) {
-    currentMacro = type;
-    const container = document.getElementById('cat-list');
-    container.innerHTML = '';
-    MENU_DATA[type].forEach(cat => {
-        const nomeCat = getTesto(cat.nome);
-        container.innerHTML += `<div class="cat-card" onclick="navToItems('${cat.id}')"><img src="${cat.foto}" alt="${nomeCat}"><span>${nomeCat}</span></div>`;
-    });
-    switchScreen('scr-categories');
-}
-
-function navToItems(catId) {
-    const catObj = MENU_DATA[currentMacro].find(c => c.id === catId);
-    const container = document.getElementById('items-list');
-    const nomeCat = getTesto(catObj.nome);
-    const testoArBtn = UI_TRANSLATIONS[userLang].ar;
-
-    container.innerHTML = `<h2 style="font-family:var(--font-titoli); font-size:1.8rem; margin: 10px 0 20px 0;">${nomeCat}</h2>`;
-    
-    catObj.piatti.forEach(p => {
-        let html = `<div class="item-card">`;
-        const nomePiatto = getTesto(p.n);
-        const descPiatto = getTesto(p.d);
-        
-        // Struttura con Foto di Base. Il Model-Viewer è trasparente e appare solo cliccando il tasto AR (reveal="manual")
-        html += `<div class="foto-piatto" style="background-image: url('${p.f}');">`;
-        if(p.m) {
-            html += `
-                <model-viewer src="${p.m}" 
-                    ar ar-modes="scene-viewer quick-look webxr" 
-                    reveal="manual"
-                    camera-controls="false">
-                    <button slot="ar-button" class="ar-btn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-                        ${testoArBtn}
-                    </button>
-                </model-viewer>`;
-        }
-        html += `</div>`;
-
-        html += `<div class="item-info">
-                    <div class="item-header"><h3>${nomePiatto}</h3><span class="item-price">${p.p}</span></div>
-                    ${p.a ? `<div class="allergens">${p.a}</div>` : ''}
-                    <p class="item-desc">${descPiatto}</p>
-                 </div></div>`;
-        container.innerHTML += html;
-    });
-    
-    document.getElementById('back-to-cat').onclick = () => navToCategories(currentMacro);
-    switchScreen('scr-items');
-}
-
-function switchScreen(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    window.scrollTo(0,0);
-}
-
-// Registrazione Service Worker per abilitare la PWA all'installazione
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch(err => console.log('SW setup fallito', err));
-    });
-}
-
-document.addEventListener('DOMContentLoaded', initApp);
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+    window.onload = init;
 </script>
 </body>
 </html>

@@ -7,26 +7,16 @@ const APP_CONFIG = {
 const MENU_DATA = {
     food: [
         { 
-            id: "antipasti", 
-            nome: "Antipasti", 
+            id: "piatti", 
             piatti: [
                 { 
                     n: "Tartare di Salmone", 
                     p: "14€", 
-                    d: "Salmone fresco, avocado e lime.", 
-                    a: "Pesce", 
+                    d: "Salmone fresco abbattuto, servito con granella di pistacchio e riduzione al lime.", 
+                    a: "Pesce, Frutta a guscio", 
                     f: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600",
-                    m: "modelli/salmone.glb",
-                    glutenFree: true // QUESTO ATTIVA IL FILTRO
-                },
-                { 
-                    n: "Lasagna Emiliana", 
-                    p: "12€", 
-                    d: "Ragù classico e besciamella.", 
-                    a: "Glutine, Latte", 
-                    f: "https://images.unsplash.com/photo-1574894709920-11b28e7367e3?w=600",
-                    m: "",
-                    glutenFree: false 
+                    m: "modelli/salmone.glb", // Assicurati che il file esista!
+                    glutenFree: true 
                 }
             ]
         }
@@ -34,27 +24,16 @@ const MENU_DATA = {
     drinks: [
         { 
             id: "cocktails", 
-            nome: "Cocktails", 
             piatti: [
                 { 
-                    n: "Mojito Bio", 
-                    p: "8€", 
-                    d: "Menta fresca bio, lime, zucchero di canna.", 
+                    n: "Gin Tonic Premium", 
+                    p: "10€", 
+                    d: "Gin botanico, acqua tonica superiore e bacche di ginepro fresche.", 
                     a: "", 
-                    f: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600",
-                    m: "",
+                    f: "", // Non serve per i drinks
+                    m: "", 
                     bio: true,
                     analcolico: false
-                },
-                { 
-                    n: "Fruit Punch", 
-                    p: "7€", 
-                    d: "Mix di frutta fresca di stagione.", 
-                    a: "", 
-                    f: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=600",
-                    m: "",
-                    bio: false,
-                    analcolico: true
                 }
             ]
         }

@@ -3,51 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Menu AR</title>
+    <title>Menu AR Pro</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000000" id="meta-theme-color">
+    <meta name="theme-color" content="#ffffff" id="meta-theme-color">
     <link rel="apple-touch-icon" href="icon-192.png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
     <style>
         :root { --colore-principale: #000; --colore-testo: #1a1a1a; --font-titoli: 'Playfair Display', serif; --font-corpo: 'Poppins', sans-serif; }
-        body { font-family: var(--font-corpo); margin: 0; background: #fff; -webkit-tap-highlight-color: transparent; }
+        body { font-family: var(--font-corpo); margin: 0; background: #fff; color: var(--colore-testo); -webkit-tap-highlight-color: transparent; }
         
-        /* BLOCCA DESKTOP */
-        #desktop-notice { display: none; text-align: center; padding: 50px 20px; height: 100vh; flex-direction: column; justify-content: center; align-items: center; background: #f9f9f9; }
+        /* BLOCCO DESKTOP */
+        #desktop-notice { display: none; text-align: center; padding: 50px 20px; height: 100vh; flex-direction: column; justify-content: center; align-items: center; background: #f4f4f4; }
         @media screen and (min-width: 768px) { #app-container { display: none; } #desktop-notice { display: flex; } }
 
-        /* HEADER E NAV */
-        header { text-align: center; padding: 20px; border-bottom: 1px solid #eee; position: sticky; top: 0; background: white; z-index: 100; }
-        .logo-testo { font-family: var(--font-titoli); font-size: 1.5rem; margin: 0; }
-        .screen { display: none; padding: 20px; animation: fadeIn 0.3s; }
+        /* HEADER */
+        header { text-align: center; padding: 15px; border-bottom: 1px solid #eee; position: sticky; top: 0; background: white; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .logo-testo { font-family: var(--font-titoli); font-size: 1.4rem; margin: 0; letter-spacing: 1px; }
+
+        /* NAVIGAZIONE */
+        .screen { display: none; padding: 20px; animation: fadeIn 0.4s ease; }
         .screen.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* FILTRI E BACKBAR */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .back-btn { background: #eee; padding: 8px 15px; border-radius: 10px; font-weight: 600; font-size: 0.9rem; cursor: pointer; }
+        .filter-btn { background: #fff; border: 1px solid var(--colore-principale); color: var(--colore-principale); padding: 8px 12px; border-radius: 10px; font-size: 0.8rem; font-weight: 600; }
+        .filter-btn.active { background: var(--colore-principale); color: #fff; }
 
         /* CARDS */
-        .btn-macro { height: 160px; border-radius: 15px; margin-bottom: 15px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; color: white; }
+        .btn-macro { height: 180px; border-radius: 20px; margin-bottom: 20px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
         .btn-macro img { position: absolute; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.5); }
-        .btn-macro span { position: relative; font-family: var(--font-titoli); font-size: 2rem; z-index: 1; }
+        .btn-macro span { position: relative; color: white; font-family: var(--font-titoli); font-size: 2.2rem; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
 
-        .item-card { background: white; border-radius: 20px; margin-bottom: 30px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-        .foto-piatto { width: 100%; height: 250px; background-size: cover; background-position: center; position: relative; }
+        .item-card { background: white; border-radius: 20px; margin-bottom: 25px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid #f0f0f0; }
+        .foto-piatto { width: 100%; height: 260px; background-size: cover; background-position: center; position: relative; background-color: #f9f9f9; }
         
-        /* BOTTONE AR PROFESSIONALE */
         .ar-btn { 
-            position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.7); color: white; 
-            border: none; padding: 10px 20px; border-radius: 30px; font-weight: 600; display: flex; align-items: center; gap: 8px;
-            backdrop-filter: blur(5px);
+            position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.8); color: white; 
+            border: none; padding: 10px 18px; border-radius: 30px; font-size: 0.8rem; font-weight: 600;
+            display: flex; align-items: center; gap: 8px; backdrop-filter: blur(4px);
         }
         model-viewer { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div id="desktop-notice">
-    <h2>📱 Solo su Smartphone</h2>
-    <p>Scansiona il QR Code dal tuo telefono per vedere il menu in Realtà Aumentata.</p>
+    <h2>📱 Esperienza Mobile</h2>
+    <p>Inquadra il QR Code con il tuo smartphone per accedere al menu interattivo.</p>
 </div>
 
 <div id="app-container">
@@ -58,59 +64,88 @@
     </div>
 
     <div id="scr-items" class="screen">
-        <div class="back-bar" onclick="location.reload()" style="cursor:pointer; margin-bottom:20px;">← Indietro</div>
+        <div class="top-bar">
+            <div class="back-btn" onclick="location.reload()">← Home</div>
+            <div id="filter-container"></div>
+        </div>
         <div id="items-list"></div>
     </div>
 </div>
 
 <script src="config.js"></script>
 <script>
-    let userLang = 'it';
+    let currentType = '';
+    let filterActive = false;
 
     function init() {
-        // Setup Colori e Logo
+        if (typeof APP_CONFIG === 'undefined') return;
+        
+        // Setup Grafico
         document.documentElement.style.setProperty('--colore-principale', APP_CONFIG.colori.principale);
         const header = document.getElementById('header-logo');
-        header.innerHTML = APP_CONFIG.tipoLogo === 'testo' ? `<h1 class="logo-testo">${APP_CONFIG.testoLogo}</h1>` : `<img src="${APP_CONFIG.urlLogoImmagine}" style="max-height:50px">`;
+        header.innerHTML = APP_CONFIG.tipoLogo === 'testo' ? `<h1 class="logo-testo">${APP_CONFIG.testoLogo}</h1>` : `<img src="${APP_CONFIG.urlLogoImmagine}" style="max-height:45px">`;
 
-        // Render Macro Categorie
+        // Home Buttons
         const container = document.getElementById('macro-container');
-        ['food', 'drinks'].forEach(type => {
-            if(MENU_DATA[type].length > 0) {
-                container.innerHTML += `
-                    <div class="btn-macro" onclick="showCat('${type}')">
-                        <img src="${type === 'food' ? 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500' : 'https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=500'}">
-                        <span>${UI_TRANSLATIONS[userLang][type]}</span>
-                    </div>`;
-            }
-        });
+        if(MENU_DATA.food.length > 0) {
+            container.innerHTML += `<div class="btn-macro" onclick="renderMenu('food')"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600"><span>FOOD</span></div>`;
+        }
+        if(MENU_DATA.drinks.length > 0) {
+            container.innerHTML += `<div class="btn-macro" onclick="renderMenu('drinks')"><img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=600"><span>DRINKS</span></div>`;
+        }
     }
 
-    function showCat(type) {
+    function renderMenu(type, filter = false) {
+        currentType = type;
+        filterActive = filter;
         const list = document.getElementById('items-list');
+        const filters = document.getElementById('filter-container');
         list.innerHTML = '';
+        
+        // Gestione Tasti Filtro
+        if(type === 'food') {
+            filters.innerHTML = `<button class="filter-btn ${filter ? 'active' : ''}" onclick="renderMenu('food', ${!filter})">Gluten Free 🌾</button>`;
+        } else {
+            filters.innerHTML = `
+                <div style="display:flex; gap:5px">
+                    <button class="filter-btn ${filter === 'analcolico' ? 'active' : ''}" onclick="renderMenu('drinks', '${filter === 'analcolico' ? false : 'analcolico'}')">Analcolico</button>
+                    <button class="filter-btn ${filter === 'bio' ? 'active' : ''}" onclick="renderMenu('drinks', '${filter === 'bio' ? false : 'bio'}')">Bio 🌿</button>
+                </div>`;
+        }
+
         MENU_DATA[type].forEach(cat => {
             cat.piatti.forEach(p => {
+                // Logica Filtri
+                if(filter === true && !p.glutenFree) return; // Filtro Food
+                if(filter === 'analcolico' && !p.analcolico) return; // Filtro Drinks Analcolico
+                if(filter === 'bio' && !p.bio) return; // Filtro Drinks Bio
+
                 list.innerHTML += `
                     <div class="item-card">
                         <div class="foto-piatto" style="background-image: url('${p.f}')">
                             ${p.m ? `<model-viewer src="${p.m}" ar ar-modes="scene-viewer quick-look" reveal="manual">
-                                <button slot="ar-button" class="ar-btn">📦 ${UI_TRANSLATIONS[userLang].ar}</button>
+                                <button slot="ar-button" class="ar-btn">Vedi in 3D 📦</button>
                             </model-viewer>` : ''}
                         </div>
                         <div style="padding:15px">
-                            <div style="display:flex; justify-content:space-between"><b>${p.n[userLang]}</b> <span>${p.p}</span></div>
-                            <p style="font-size:0.9rem; color:#666">${p.d[userLang]}</p>
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <b style="font-size:1.1rem">${p.n}</b> 
+                                <span style="color:var(--colore-principale); font-weight:700">${p.p}</span>
+                            </div>
+                            <p style="font-size:0.85rem; color:#666; margin: 8px 0">${p.d}</p>
+                            <div style="font-size:0.75rem; opacity:0.6">${p.a ? 'Allergeni: ' + p.a : ''}</div>
                         </div>
                     </div>`;
             });
         });
+
         document.getElementById('scr-landing').classList.remove('active');
         document.getElementById('scr-items').classList.add('active');
+        window.scrollTo(0,0);
     }
 
-    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
     window.onload = init;
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
 </script>
 </body>
 </html>

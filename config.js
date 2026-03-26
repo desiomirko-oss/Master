@@ -1,5 +1,6 @@
 const APP_CONFIG = {
-    testoLogo: "EXPERIENCE AR",
+    testoLogo: "EXPERIENCE AR",  // Appare se logoURL è vuoto
+    logoURL: "logo.png",       // Lascia "" per usare il testo, o metti l'URL per l'immagine
     colori: { principale: "#c0392b" }
 };
 

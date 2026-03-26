@@ -13,25 +13,33 @@
         :root { --colore-principale: #000; --font-titoli: 'Playfair Display', serif; --font-corpo: 'Poppins', sans-serif; }
         body { font-family: var(--font-corpo); margin: 0; background: #fff; color: #1a1a1a; overflow-x: hidden; }
 
-        header { text-align: center; padding: 20px; border-bottom: 1px solid #eee; position: sticky; top: 0; background: white; z-index: 100; }
+        /* HEADER FISSO */
+        header { 
+            text-align: center; padding: 15px; border-bottom: 1px solid #eee; 
+            position: sticky; top: 0; background: white; z-index: 100; 
+            min-height: 50px; display: flex; align-items: center; justify-content: center;
+        }
         .logo-testo { font-family: var(--font-titoli); font-size: 1.6rem; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+        .logo-img { max-height: 50px; width: auto; display: block; }
 
         .screen { display: none; padding: 0; animation: fadeIn 0.4s ease; }
         .screen.active { display: block; }
 
-        /* CARD GRANDI HOME E SOTTOCATEGORIE */
+        /* CARD GRANDI HOME E SOTTOCATEGORIE (Full Screen Width) */
         .btn-macro { 
             height: 280px; width: 100%; position: relative; overflow: hidden; 
             display: flex; align-items: center; justify-content: center; margin-bottom: 2px;
+            cursor: pointer;
         }
         .btn-macro img { position: absolute; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6); }
-        .btn-macro span { position: relative; color: white; font-family: var(--font-titoli); font-size: 2.2rem; text-transform: uppercase; letter-spacing: 3px; }
+        .btn-macro span { position: relative; color: white; font-family: var(--font-titoli); font-size: 2.2rem; text-transform: uppercase; letter-spacing: 3px; text-align: center; }
 
         /* LISTA ITEM */
         .padding-area { padding: 20px; }
         .item-card { background: white; border-radius: 25px; margin-bottom: 30px; overflow: hidden; border: 1px solid #f0f0f0; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
         .foto-piatto { width: 100%; height: 300px; position: relative; background-color: #f9f9f9; background-size: cover; background-position: center; }
         
+        /* BOTTONE AR */
         .ar-btn { 
             position: absolute; bottom: 20px; right: 20px; background: #000; color: white; 
             border: none; padding: 14px 24px; border-radius: 50px; font-weight: 600; font-size: 0.75rem;
@@ -40,13 +48,15 @@
         
         model-viewer { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
 
+        /* INFO PIATTO */
         .info { padding: 20px; }
         .price { color: var(--colore-principale); font-weight: 700; font-size: 1.2rem; }
         .desc { font-size: 0.9rem; color: #555; margin: 10px 0; line-height: 1.6; }
         .allergeni-tag { display: block; margin-top: 12px; font-size: 0.7rem; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 1px; border-top: 1px solid #eee; padding-top: 10px; }
 
-        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 20px; }
-        .back-btn { background: #000; color: white; padding: 10px 20px; border-radius: 12px; font-weight: 600; font-size: 0.8rem; border: none; }
+        /* BARRA SUPERIORE NAVIGAZIONE */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #fcfcfc; }
+        .back-btn { background: #000; color: white; padding: 10px 18px; border-radius: 12px; font-weight: 600; font-size: 0.8rem; border: none; cursor: pointer; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -85,76 +95,3 @@
         document.getElementById(id).classList.add('active');
         window.scrollTo(0,0);
     }
-
-    function init() {
-        if (typeof APP_CONFIG === 'undefined') return;
-        document.documentElement.style.setProperty('--colore-principale', APP_CONFIG.colori.principale);
-        document.getElementById('header-logo').innerHTML = `<h1 class="logo-testo">${APP_CONFIG.testoLogo}</h1>`;
-
-        const container = document.getElementById('macro-container');
-        container.innerHTML = `
-            <div class="btn-macro" onclick="renderSubCats('food')">
-                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800">
-                <span>Cucina</span>
-            </div>
-            <div class="btn-macro" onclick="renderSubCats('drinks')">
-                <img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=800">
-                <span>Cantina</span>
-            </div>
-        `;
-    }
-
-    // LIVELLO 2: Rendering delle Sottocategorie
-    function renderSubCats(type) {
-        currentMainType = type;
-        const container = document.getElementById('subcats-list');
-        container.innerHTML = '';
-        const lang = navigator.language.startsWith('es') ? 'es' : 'it';
-
-        MENU_DATA[type].forEach(cat => {
-            // Se nel config.js non hai 'fotoCat', usa una immagine di default elegante
-            const imgCat = cat.foto || 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800';
-            container.innerHTML += `
-                <div class="btn-macro" onclick="renderItems('${cat.id}')">
-                    <img src="${imgCat}">
-                    <span>${cat.nome[lang] || cat.nome}</span>
-                </div>
-            `;
-        });
-        switchScreen('scr-subcats');
-    }
-
-    // LIVELLO 3: Rendering dei Piatti
-    function renderItems(catId) {
-        const list = document.getElementById('items-list');
-        list.innerHTML = '';
-        const cat = MENU_DATA[currentMainType].find(c => c.id === catId);
-        const lang = navigator.language.startsWith('es') ? 'es' : 'it';
-
-        cat.piatti.forEach(p => {
-            let html = `
-                <div class="item-card">
-                    <div class="foto-piatto" style="background-image: url('${p.f}')">
-                        ${p.m ? `
-                        <model-viewer src="${p.m}" ar ar-modes="scene-viewer quick-look webxr" 
-                            ar-placement="floor" ar-scale="fixed" camera-controls shadow-intensity="1" 
-                            exposure="1" environment-image="neutral" reveal="manual">
-                            <button slot="ar-button" class="ar-btn">VEDI SUL TAVOLO 📦</button>
-                        </model-viewer>` : ''}
-                    </div>
-                    <div class="info">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <b style="font-size:1.1rem">${p.n}</b> 
-                            <span class="price">${p.p}</span>
-                        </div>
-                        <p class="desc">${p.d}</p>
-                        ${p.a ? `<span class="allergeni-tag">Allergeni: ${p.a}</span>` : ''}
-                    </div>
-                </div>`;
-            list.innerHTML += html;
-        });
-        switchScreen('scr-items');
-    }
-</script>
-</body>
-</html>

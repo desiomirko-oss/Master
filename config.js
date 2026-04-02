@@ -13,14 +13,24 @@ const MENU_DATA = {
                     p: "15€", 
                     d: "Selezione di salumi e formaggi locali.", 
                     f: "link_foto.jpg", 
-                    m: "modello.glb", // Il tuo modello 3D
+                    m: "Zucca.glb", // Il tuo modello 3D
                     a: "Lattosio, Glutine" // Allergeni
                 }
             ]
         },
         { 
             id: "Primi", 
-            piatti: [ /* altri piatti qui */ ]
+            piatti: [ /* altri piatti qui */
+               { 
+                    n: "Tagliere Nuovo", 
+                    p: "18€", 
+                    d: "Selezione di salumi e cose.", 
+                    f: "link_foto.jpg", 
+                    m: "", // Il tuo modello 3D
+                    a: "Lattosio, Glutine" // Allergeni
+                }
+            
+            ]
         }
     ],
     drinks: [

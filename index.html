@@ -5,161 +5,128 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Menu AR Pro</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#ffffff">
-    <link rel="apple-touch-icon" href="icon-192.png">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
         :root { --colore-principale: #000; --font-titoli: 'Playfair Display', serif; --font-corpo: 'Poppins', sans-serif; }
-        body { font-family: var(--font-corpo); margin: 0; background: #fff; color: #1a1a1a; overflow-x: hidden; }
-        #install-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
-        .modal-content { background: white; padding: 30px; border-radius: 30px; text-align: center; width: 80%; max-width: 350px; }
-        .btn-install { background: #000; color: white; border: none; padding: 15px; border-radius: 50px; width: 100%; font-weight: 600; margin-top: 15px; }
-        header { text-align: center; padding: 15px; border-bottom: 1px solid #eee; position: sticky; top: 0; background: white; z-index: 100; }
-        .logo-testo { font-family: var(--font-titoli); font-size: 1.4rem; margin: 0; text-transform: uppercase; }
+        body { font-family: var(--font-corpo); margin: 0; background: #fff; color: #1a1a1a; }
+        
+        /* Layout Verticale Macro Categorie */
+        #macro-container { display: flex; flex-direction: column; gap: 15px; padding: 20px; }
+        
+        .btn-macro { height: 180px; border-radius: 25px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+        .btn-macro img { position: absolute; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6); }
+        .btn-macro span { position: relative; color: white; font-family: var(--font-titoli); font-size: 2.2rem; text-transform: uppercase; letter-spacing: 2px; }
+
         .screen { display: none; padding: 20px; animation: fadeIn 0.4s ease; }
         .screen.active { display: block; }
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .back-btn { background: #f0f0f0; padding: 10px 15px; border-radius: 12px; font-weight: 600; font-size: 0.8rem; border: none; }
-        .btn-macro { height: 160px; border-radius: 20px; margin-bottom: 20px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .btn-macro img { position: absolute; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.5); }
-        .btn-macro span { position: relative; color: white; font-family: var(--font-titoli); font-size: 2rem; }
-        .btn-categoria { height: 80px; border-radius: 15px; background: #f9f9f9; border: 1px solid #eee; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; font-family: var(--font-titoli); font-size: 1.2rem; }
-        .item-card { background: white; border-radius: 20px; margin-bottom: 25px; overflow: hidden; border: 1px solid #f0f0f0; }
-        .foto-piatto { width: 100%; height: 280px; position: relative; background-color: #f9f9f9; background-size: cover; background-position: center; }
-        .ar-btn { position: absolute; bottom: 15px; right: 15px; background: #000; color: white; border: none; padding: 12px 20px; border-radius: 50px; font-weight: 600; font-size: 0.75rem; display: flex; align-items: center; gap: 8px; z-index: 10; }
-        model-viewer { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
-        .info { padding: 15px; }
-        .price { color: var(--colore-principale); font-weight: 700; }
+        
+        /* Filtri */
+        .filter-container { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px; }
+        .filter-btn { border: 1.5px solid #000; background: white; padding: 8px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; white-space: nowrap; }
+        .filter-btn.active { background: #000; color: white; }
+
+        /* Card Piatti */
+        .item-card { background: white; border-radius: 20px; margin-bottom: 30px; overflow: hidden; border: 1px solid #f0f0f0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .foto-piatto { width: 100%; height: 250px; background-size: cover; background-position: center; position: relative; }
+        
+        /* Bottone AR professionale (senza anteprima 3D che copre la foto) */
+        model-viewer { width: 100%; height: 100%; position: absolute; top: 0; left: 0; --poster-color: transparent; }
+        .ar-btn { position: absolute; bottom: 15px; right: 15px; background: #000; color: white; border: none; padding: 10px 18px; border-radius: 50px; font-weight: 600; font-size: 0.7rem; z-index: 10; display: flex; align-items: center; gap: 5px; }
+
+        .info { padding: 20px; }
+        .price { font-weight: 700; color: var(--colore-principale); font-size: 1.2rem; }
+        .desc { font-size: 0.9rem; color: #555; margin: 10px 0; line-height: 1.4; }
+        .allergens { font-size: 0.75rem; color: #999; font-style: italic; border-top: 1px solid #eee; pt: 10px; margin-top: 10px; }
+
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
-<div id="install-modal">
-    <div class="modal-content">
-        <h3 id="pwa-title">Menu Digitale</h3>
-        <p id="pwa-desc">Installa l'app per un'esperienza migliore.</p>
-        <button class="btn-install" id="btn-pwa">INSTALLA</button>
-    </div>
-</div>
-
 <div id="app-container">
-    <header id="header-logo"></header>
+    <header style="text-align:center; padding:20px;"><h1 id="logo-site" style="font-family:var(--font-titoli); margin:0;"></h1></header>
+
     <div id="scr-landing" class="screen active"><div id="macro-container"></div></div>
-    <div id="scr-categories" class="screen">
-        <div class="top-bar"><button class="back-btn" onclick="goHome()">← Home</button></div>
-        <div id="categories-list"></div>
-    </div>
-    <div id="scr-subcategories" class="screen">
-        <div class="top-bar"><button class="back-btn" id="btn-back-to-cat">←</button></div>
-        <div id="subcategories-list"></div>
-    </div>
+
     <div id="scr-items" class="screen">
-        <div class="top-bar"><button class="back-btn" id="btn-back-to-sub">←</button></div>
+        <button onclick="goHome()" style="margin-bottom:15px; background:none; border:none; font-weight:600;">← INDIETRO</button>
+        <div id="filter-area" class="filter-container"></div>
         <div id="items-list"></div>
     </div>
 </div>
 
 <script src="config.js"></script>
 <script>
-    const userLang = (navigator.language || navigator.userLanguage).substring(0, 2).toLowerCase();
-    const i18n = {
-        it: { food: "CUCINA", drinks: "CANTINA", arBtn: "VEDI SUL TAVOLO 📦", allergens: "Allergeni" },
-        en: { food: "KITCHEN", drinks: "CELLAR", arBtn: "VIEW ON TABLE 📦", allergens: "Allergens" }
-        // Aggiungi le altre 6 lingue qui...
-    };
-    const lang = i18n[userLang] ? userLang : 'it';
-    const t = (key) => i18n[lang][key];
-    const getT = (field) => (typeof field === 'object' ? field[lang] || field['it'] : field);
-
-    let deferredPrompt;
-    window.onload = () => {
-        init();
-        if (/Android|iPhone|iPad/i.test(navigator.userAgent) && !localStorage.getItem('pwa_done')) {
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault(); deferredPrompt = e;
-                document.getElementById('install-modal').style.display = 'flex';
-            });
-        }
-    };
+    const userLang = (navigator.language || 'it').substring(0, 2);
+    const t = {
+        it: { food: "CUCINA", drinks: "CANTINA", ar: "VEDI IN 3D 📦", alg: "Allergeni:", alc: "Analcolico" },
+        en: { food: "KITCHEN", drinks: "CELLAR", ar: "VIEW IN 3D 📦", alg: "Allergens:", alc: "Non-Alcoholic" }
+    }[userLang] || { food: "KITCHEN", drinks: "CELLAR", ar: "VIEW IN 3D 📦", alg: "Allergens:", alc: "Non-Alcoholic" };
 
     function init() {
-        document.documentElement.style.setProperty('--colore-principale', APP_CONFIG.colori.principale);
-        document.getElementById('header-logo').innerHTML = `<h1 class="logo-testo">${APP_CONFIG.testoLogo}</h1>`;
+        document.getElementById('logo-site').innerText = APP_CONFIG.testoLogo;
         const container = document.getElementById('macro-container');
-        if(MENU_DATA.food) container.innerHTML += `<div class="btn-macro" onclick="renderCategories('food')"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600"><span>${t('food')}</span></div>`;
-        if(MENU_DATA.drinks) container.innerHTML += `<div class="btn-macro" onclick="renderCategories('drinks')"><img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=600"><span>${t('drinks')}</span></div>`;
-    }
-
-    function showScreen(id) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        window.scrollTo(0,0);
-    }
-
-    function goHome() { showScreen('scr-landing'); }
-
-    function renderCategories(type) {
-        const list = document.getElementById('categories-list');
-        list.innerHTML = '';
-        MENU_DATA[type].forEach((cat, index) => {
-            list.innerHTML += `<div class="btn-categoria" onclick="handleCategoryClick('${type}', ${index})">${getT(cat.id)}</div>`;
-        });
-        showScreen('scr-categories');
-    }
-
-    function handleCategoryClick(type, catIndex) {
-        const category = MENU_DATA[type][catIndex];
-        if (category.sottocategorie) {
-            renderSubcategories(type, catIndex);
-        } else {
-            renderItems(category.piatti, 'scr-categories', () => renderCategories(type));
-        }
-    }
-
-    function renderSubcategories(type, catIndex) {
-        const list = document.getElementById('subcategories-list');
-        list.innerHTML = '';
-        const category = MENU_DATA[type][catIndex];
-        document.getElementById('btn-back-to-cat').onclick = () => renderCategories(type);
         
-        category.sottocategorie.forEach((sub) => {
-            list.innerHTML += `<div class="btn-categoria" onclick="renderItemsBySub('${type}', ${catIndex}, '${sub.id.it || sub.id}')">${getT(sub.id)}</div>`;
-        });
-        showScreen('scr-subcategories');
+        container.innerHTML = `
+            <div class="btn-macro" onclick="renderMenu('food')">
+                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800">
+                <span>${t.food}</span>
+            </div>
+            <div class="btn-macro" onclick="renderMenu('drinks')">
+                <img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=800">
+                <span>${t.drinks}</span>
+            </div>
+        `;
     }
 
-    function renderItemsBySub(type, catIndex, subId) {
-        const sub = MENU_DATA[type][catIndex].sottocategorie.find(s => (s.id.it || s.id) === subId);
-        renderItems(sub.piatti, 'scr-subcategories', () => renderSubcategories(type, catIndex));
-    }
-
-    function renderItems(piatti, backScreenId, backFn) {
+    function renderMenu(type, filter = null) {
         const list = document.getElementById('items-list');
+        const filterArea = document.getElementById('filter-area');
         list.innerHTML = '';
-        document.getElementById('btn-back-to-sub').onclick = backFn;
+        
+        // Gestione Filtri
+        if(type === 'drinks') {
+            filterArea.innerHTML = `<button class="filter-btn ${filter==='alc'?'active':''}" onclick="renderMenu('drinks', '${filter==='alc'?null:'alc'}')">${t.alc}</button>`;
+        } else {
+            filterArea.innerHTML = '';
+        }
 
-        piatti.forEach(p => {
-            let html = `<div class="item-card">`;
-            if(p.f || p.m) {
-                html += `<div class="foto-piatto" style="background-image: url('${p.f}')">`;
-                if(p.m) {
-                    html += `<model-viewer src="${p.m}" ar ar-modes="scene-viewer quick-look webxr" ar-placement="floor" ar-scale="fixed" camera-controls touch-action="none" shadow-intensity="1" exposure="1" environment-image="neutral" reveal="auto">
-                                <button slot="ar-button" class="ar-btn">${t('arBtn')}</button>
-                             </model-viewer>`;
-                }
-                html += `</div>`;
-            }
-            html += `<div class="info">
-                        <div style="display:flex; justify-content:space-between;"><b>${getT(p.n)}</b> <span class="price">${p.p}</span></div>
-                        <p style="font-size:0.85rem; color:#666;">${getT(p.d)}</p>
-                     </div></div>`;
-            list.innerHTML += html;
+        MENU_DATA[type].forEach(cat => {
+            cat.piatti.forEach(p => {
+                if(filter === 'alc' && !p.analcolico) return;
+
+                let html = `
+                <div class="item-card">
+                    <div class="foto-piatto" style="background-image: url('${p.f}')">
+                        ${p.m ? `
+                        <model-viewer src="${p.m}" ar ar-modes="scene-viewer quick-look webxr" reveal="manual" ar-scale="fixed">
+                            <button slot="ar-button" class="ar-btn">${t.ar}</button>
+                        </model-viewer>` : ''}
+                    </div>
+                    <div class="info">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <b>${p.n}</b> <span class="price">${p.p}</span>
+                        </div>
+                        <p class="desc">${p.d}</p>
+                        <div class="allergens">${t.alg} ${p.a || 'Nessuno'}</div>
+                    </div>
+                </div>`;
+                list.innerHTML += html;
+            });
         });
-        showScreen('scr-items');
+
+        document.getElementById('scr-landing').classList.remove('active');
+        document.getElementById('scr-items').classList.add('active');
     }
+
+    function goHome() {
+        document.getElementById('scr-items').classList.remove('active');
+        document.getElementById('scr-landing').classList.add('active');
+    }
+
+    init();
 </script>
 </body>
 </html>

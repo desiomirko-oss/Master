@@ -7,16 +7,7 @@ const MENU_DATA = {
     food: [
         { 
             id: "Antipasti", 
-            piatti: [
-                { 
-                    n: "Tagliere Misto", 
-                    p: "15€", 
-                    d: "Selezione di salumi e formaggi locali.", 
-                    f: "link_foto.jpg", 
-                    m: "Zucca.glb", // Il tuo modello 3D
-                    a: "Lattosio, Glutine" // Allergeni
-                }
-            ]
+            piatti: [ ]
         },
         { 
             id: "Primi", 

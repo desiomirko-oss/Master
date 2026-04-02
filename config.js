@@ -60,38 +60,6 @@ const MENU_DATA = {
                 }
             ]
         }
-        { 
-            id: "Secondi", 
-            piatti: [
-                { 
-                    n: "Tagliere di Carne", 
-                    p: "15€", 
-                    d: "Selezione di salumi e formaggi locali.", 
-                    f: "https://images.selex-insegne.stormreply.com/mediaObject/OLD/tagliere/original/tagliere.jpg", 
-                    m: "Zucca.glb", 
-                    a: "Lattosio",
-                    sg: true, // true se è Senza Glutine
-                    v: false  // true se è Vegetariano
-                },
-                { 
-                    n: "Carpaccio", 
-                    p: "12€", 
-                    d: "Mozzarella di bufala campana DOP e pomodorini.", 
-                    f: "https://www.lilvienna.com/wp-content/uploads/Recipe-Classic-Italian-Caprese-Salad.jpg", 
-                    a: "Lattosio",
-                    sg: true,
-                    v: true // È vegetariano
-                },
-                { 
-                    n: "Costine", 
-                    p: "19€", 
-                    d: "Piatto tipico italiano con pasta fresca.", 
-                    f: "https://www.giallozafferano.it/images/229-22941/Lasagne-alla-Bolognese_650x433_wm.jpg",  
-                    a: "Lattosio",
-                    sg: true, // true se è Senza Glutine
-                    v: true  // true se è Vegetariano
-            ]
-        },
     ],
     drinks: [
         { 

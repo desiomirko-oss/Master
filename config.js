@@ -1,5 +1,5 @@
 const APP_CONFIG = {
-    testoLogo: "DOÑA LOLA",
+    testoLogo: "BENVENUTO",
     colori: { principale: "#000000" }
 };
 

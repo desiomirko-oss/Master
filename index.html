@@ -13,29 +13,27 @@
         
         header { text-align: center; padding: 20px; border-bottom: 1px solid #eee; background: white; position: sticky; top: 0; z-index: 100; }
         
-        /* LAYOUT VERTICALE MACRO */
+        /* LIVELLO 1: Layout Verticale */
         #macro-container { display: flex; flex-direction: column; gap: 15px; padding: 20px; }
-        
         .btn-macro { height: 180px; border-radius: 25px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .btn-macro img { position: absolute; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.5); }
-        .btn-macro span { position: relative; color: white; font-family: var(--font-titoli); font-size: 2rem; text-transform: uppercase; letter-spacing: 2px; }
+        .btn-macro img { position: absolute; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.45); }
+        .btn-macro span { position: relative; color: white; font-family: var(--font-titoli); font-size: 2.2rem; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* SCHERMATE */
         .screen { display: none; padding: 20px; animation: fadeIn 0.3s ease; }
         .screen.active { display: block; }
         
         .top-bar { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
-        .back-btn { background: #f0f0f0; border: none; padding: 12px 18px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+        .back-btn { background: #f0f0f0; border: none; padding: 12px 18px; border-radius: 12px; font-weight: 600; cursor: pointer; }
 
-        /* LISTE CATEGORIE E SOTTOCAT */
+        /* LIVELLO 2: Categorie */
         .btn-list { display: flex; flex-direction: column; gap: 10px; }
-        .btn-item { background: #f9f9f9; border: 1px solid #eee; padding: 18px; border-radius: 15px; font-family: var(--font-titoli); font-size: 1.2rem; text-align: center; font-weight: bold; }
+        .btn-item { background: #f9f9f9; border: 1px solid #eee; padding: 20px; border-radius: 15px; font-family: var(--font-titoli); font-size: 1.3rem; text-align: center; font-weight: bold; }
 
-        /* CARD PIATTI */
+        /* LIVELLO 3: Card Piatti */
         .item-card { background: white; border-radius: 20px; margin-bottom: 25px; overflow: hidden; border: 1px solid #f0f0f0; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .foto-piatto { width: 100%; height: 260px; background-size: cover; background-position: center; position: relative; background-color: #f5f5f5; }
         
-        /* AR CONFIG */
+        /* FIX AR: Nessun'anteprima e modelli luminosi */
         model-viewer { width: 100%; height: 100%; position: absolute; top: 0; left: 0; --poster-color: transparent; }
         .ar-btn { position: absolute; bottom: 15px; right: 15px; background: #000; color: white; border: none; padding: 12px 20px; border-radius: 50px; font-weight: 600; font-size: 0.75rem; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
 
@@ -44,8 +42,8 @@
         .desc { font-size: 0.9rem; color: #555; margin: 10px 0; line-height: 1.5; clear: both; }
         .allergens { font-size: 0.75rem; color: #999; font-style: italic; border-top: 1px solid #eee; padding-top: 10px; margin-top: 10px; }
 
-        .filter-container { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 20px; padding-bottom: 5px; }
-        .filter-btn { border: 1.5px solid #000; background: white; padding: 8px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; white-space: nowrap; }
+        .filter-container { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 20px; }
+        .filter-btn { border: 1.5px solid #000; background: white; padding: 8px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
         .filter-btn.active { background: #000; color: white; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -54,7 +52,7 @@
 <body>
 
 <div id="app-container">
-    <header><h1 id="logo-site" style="font-family:var(--font-titoli); margin:0;">MENU</h1></header>
+    <header><h1 id="logo-site" style="font-family:var(--font-titoli); margin:0;"></h1></header>
 
     <div id="scr-landing" class="screen active">
         <div id="macro-container"></div>
@@ -65,13 +63,8 @@
         <div id="categories-list" class="btn-list"></div>
     </div>
 
-    <div id="scr-subcategories" class="screen">
-        <div class="top-bar"><button class="back-btn" id="btn-back-to-cat">← INDIETRO</button></div>
-        <div id="subcategories-list" class="btn-list"></div>
-    </div>
-
     <div id="scr-items" class="screen">
-        <div class="top-bar"><button class="back-btn" id="btn-back-to-prev">← INDIETRO</button></div>
+        <div class="top-bar"><button class="back-btn" id="btn-back-to-cat">← INDIETRO</button></div>
         <div id="filter-area" class="filter-container"></div>
         <div id="items-list"></div>
     </div>
@@ -79,7 +72,7 @@
 
 <script src="config.js"></script>
 <script>
-    // --- FIX CACHE E SERVICE WORKER (Risolve il problema Incognito) ---
+    // FIX CACHE: Rimuove vecchi Service Worker per far funzionare l'AR senza modalità incognito
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.getRegistrations().then(registrations => {
             for(let registration of registrations) { registration.unregister(); }
@@ -94,17 +87,12 @@
 
     function showScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        const target = document.getElementById(id);
-        if(target) target.classList.add('active');
+        document.getElementById(id).classList.add('active');
         window.scrollTo(0,0);
     }
 
     function init() {
-        if(typeof APP_CONFIG !== 'undefined') {
-            document.getElementById('logo-site').innerText = APP_CONFIG.testoLogo;
-            document.documentElement.style.setProperty('--colore-principale', APP_CONFIG.colori.principale);
-        }
-        
+        document.getElementById('logo-site').innerText = APP_CONFIG.testoLogo;
         const container = document.getElementById('macro-container');
         container.innerHTML = `
             <div class="btn-macro" onclick="renderCategories('food')">
@@ -121,85 +109,49 @@
     function renderCategories(type) {
         const list = document.getElementById('categories-list');
         list.innerHTML = '';
-        if(!MENU_DATA[type]) return;
-
         MENU_DATA[type].forEach((cat, index) => {
-            const label = (typeof cat.id === 'object') ? (cat.id[userLang] || cat.id['it']) : cat.id;
-            list.innerHTML += `<div class="btn-item" onclick="handleCategoryClick('${type}', ${index})">${label.toUpperCase()}</div>`;
+            list.innerHTML += `<div class="btn-item" onclick="renderItems(MENU_DATA['${type}'][${index}].piatti, '${type}')">${cat.id.toUpperCase()}</div>`;
         });
         showScreen('scr-categories');
     }
 
-    function handleCategoryClick(type, catIndex) {
-        const cat = MENU_DATA[type][catIndex];
-        if (cat.sottocategorie && cat.sottocategorie.length > 0) {
-            renderSubcategories(type, catIndex);
-        } else if (cat.piatti) {
-            renderItems(cat.piatti, type, () => renderCategories(type));
-        }
-    }
-
-    function renderSubcategories(type, catIndex) {
-        const list = document.getElementById('subcategories-list');
-        const cat = MENU_DATA[type][catIndex];
-        list.innerHTML = '';
-        document.getElementById('btn-back-to-cat').onclick = () => renderCategories(type);
-        
-        cat.sottocategorie.forEach((sub, subIndex) => {
-            const label = (typeof sub.id === 'object') ? (sub.id[userLang] || sub.id['it']) : sub.id;
-            list.innerHTML += `<div class="btn-item" onclick="renderItems(MENU_DATA['${type}'][${catIndex}].sottocategorie[${subIndex}].piatti, '${type}', () => renderSubcategories('${type}', ${catIndex}))">${label.toUpperCase()}</div>`;
-        });
-        showScreen('scr-subcategories');
-    }
-
-    let currentItemsData = [];
-    function renderItems(piatti, type, backFn, filter = null) {
+    function renderItems(piatti, type, filter = null) {
         const list = document.getElementById('items-list');
         const filterArea = document.getElementById('filter-area');
         list.innerHTML = '';
-        document.getElementById('back-to-prev').onclick = backFn;
-        currentItemsData = piatti;
+        document.getElementById('btn-back-to-cat').onclick = () => renderCategories(type);
 
         if(type === 'drinks') {
-            filterArea.innerHTML = `<button class="filter-btn ${filter==='alc'?'active':''}" onclick="applyFilter('${type}', '${backFn.name}', '${filter==='alc'?null:'alc'}')">${t.alc}</button>`;
+            filterArea.innerHTML = `<button class="filter-btn ${filter==='alc'?'active':''}" onclick="applyDrinkFilter('${filter==='alc'?null:'alc'}')">${t.alc}</button>`;
+            window.currentDrinkPiatti = piatti;
         } else {
             filterArea.innerHTML = '';
         }
 
         piatti.forEach(p => {
             if(filter === 'alc' && !p.analcolico) return;
-
-            const nome = (typeof p.n === 'object') ? (p.n[userLang] || p.n['it']) : p.n;
-            const desc = (typeof p.d === 'object') ? (p.d[userLang] || p.d['it']) : p.d;
-            const alg = (typeof p.a === 'object') ? (p.a[userLang] || p.a['it']) : (p.a || 'Nessuno');
-
             list.innerHTML += `
             <div class="item-card">
                 <div class="foto-piatto" style="background-image: url('${p.f}')">
                     ${p.m ? `
-                    <model-viewer src="${p.m}" ar ar-modes="scene-viewer quick-look webxr" reveal="manual" ar-scale="fixed" environment-image="neutral" exposure="1.2" camera-controls>
+                    <model-viewer src="${p.m}" ar ar-modes="scene-viewer quick-look webxr" reveal="manual" ar-scale="fixed" environment-image="neutral" exposure="1.2">
                         <button slot="ar-button" class="ar-btn">${t.ar}</button>
                     </model-viewer>` : ''}
                 </div>
                 <div class="info">
                     <span class="price">${p.p}</span>
-                    <b>${nome}</b>
-                    <p class="desc">${desc}</p>
-                    <div class="allergens">${t.alg} ${alg}</div>
+                    <b>${p.n}</b>
+                    <p class="desc">${p.d}</p>
+                    <div class="allergens">${t.alg} ${p.a || 'Nessuno'}</div>
                 </div>
             </div>`;
         });
         showScreen('scr-items');
     }
 
-    // Helper per il filtro analcolico
-    window.applyFilter = (type, backFnName, filterValue) => {
-        const backFn = (backFnName === 'renderCategories') ? () => renderCategories(type) : window.lastSubcatFn;
-        renderItems(currentItemsData, type, backFn, filterValue);
-    };
+    window.applyDrinkFilter = (f) => renderItems(window.currentDrinkPiatti, 'drinks', f);
 
-    // Avvio
-    try { init(); } catch(e) { console.error("Errore inizializzazione:", e); }
+    init();
 </script>
 </body>
 </html>

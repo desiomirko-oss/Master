@@ -59,7 +59,11 @@ const MENU_DATA = {
                     v: false
                 }
             ]
-        }
+        },
+         {
+             id: "Secondi", 
+            piatti: [ ]
+        },
     ],
     drinks: [
         { 
